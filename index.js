@@ -62,4 +62,25 @@ async function getTimeSlots() {
   return timeJson.slots_data;
 }
 
-getTimeSlots().then((timeSlots) => console.log(JSON.stringify(timeSlots, null, 2)));
+function formatTimeSlots(timeSlots) {
+  const dates = Object.keys(timeSlots);
+  return dates.reduce((acc, date) => {
+    const dateAcc = timeSlots[date].slots.reduce((slotAcc, slot) => {
+      if(Boolean(slot.additional_text)) {
+        return {
+          ...slotAcc,
+          [slot.time_text]: slot.additional_text,
+        };
+      }
+
+      return slotAcc;
+    }, {});
+    
+    return {
+      ...acc,
+      [date]: dateAcc,
+    }
+  }, {});
+}
+
+getTimeSlots().then((timeSlots) => console.log(JSON.stringify(formatTimeSlots(timeSlots), null, 2)));
