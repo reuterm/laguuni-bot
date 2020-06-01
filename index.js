@@ -1,9 +1,11 @@
 const fetch = require('node-fetch');
 const jsdom = require('jsdom')
+const axios = require('axios');
 
 const BASE_URL = 'https://laguuniin.fi/';
 const PRO_URL = 'https://laguuniin.fi/app/themes/LevelupSkele/templates/bookly_ajax.php?service=pro_kaapeli_keilis&location=1';
 const PRO_TIME_SLOTS_URL = (csrfToken, formId) => `https://laguuniin.fi/wp/wp-admin/admin-ajax.php?lang=fi&action=bookly_render_time&csrf_token=${csrfToken}&form_id=${formId}`;
+const TELEGRAM_REPLY_URL = (token) => `https://api.telegram.org/bot${token}/sendMessage`;
 
 async function sendInitialRequest() {
   const response = await fetch(BASE_URL);
@@ -83,4 +85,35 @@ function formatTimeSlots(timeSlots) {
   }, {});
 }
 
-getTimeSlots().then((timeSlots) => console.log(JSON.stringify(formatTimeSlots(timeSlots), null, 2)));
+function sendMessage(data, res) {
+  const token = process.env.TELEGRAM_TOKEN;
+  const url = TELEGRAM_REPLY_URL(token);
+  axios.post(url, {
+    chat_id: data.chatId,
+    text: data.timeSlots
+  })
+  .then(() => {
+    res.send({ status: 'OK'});
+  })
+  .catch((err) => {
+    console.log(err);
+    res.sendStatus(500);
+  });
+}
+
+/**
+ * Responds to any HTTP request.
+ *
+ * @param {!express:Request} req HTTP request context.
+ * @param {!express:Response} res HTTP response context.
+ */
+exports.sendTimeSlotJson = async (req, res) => {
+  const timeSlotsRaw = await getTimeSlots();
+  const timeSlots = formatTimeSlots(timeSlotsRaw);
+  const message = req.body.message;
+
+  sendMessage({
+    timeSlots,
+    chatId: message.chat.id
+  }, res);
+};
