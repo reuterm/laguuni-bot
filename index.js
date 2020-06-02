@@ -1,5 +1,5 @@
 const axios = require('axios');
-const { getTimeSlots, formatTimeSlots } = require('./crawler');
+const { getTimeSlots, formatTimeSlots } = require('./src/crawler/crawler');
 
 const TELEGRAM_REPLY_URL = (token) => `https://api.telegram.org/bot${token}/sendMessage`;
 

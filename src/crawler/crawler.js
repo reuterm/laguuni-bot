@@ -29,7 +29,7 @@ async function getCsrfToken(response) {
     .filter((script) => script.includes("csrf_token"));
 
   const tokenMatches = scripts.length > 0 ? scripts[0].match(/{[^}]+}/) : [];
-  const tokenObject = tokenMatches.length > 0 ? JSON.parse(tokenMatches[0]) : {};
+  const tokenObject = tokenMatches && tokenMatches.length > 0 ? JSON.parse(tokenMatches[0]) : {};
 
   return tokenObject.csrf_token;
 }
@@ -43,7 +43,7 @@ async function getFormId(sessionCookie) {
   const text = await response.text();
 
   const idMatches = text.match(/"form_id"[^,]+/);
-  const idObject = idMatches.length > 0 ? JSON.parse(`{${idMatches[0]}}`): {};
+  const idObject = idMatches && idMatches.length > 0 ? JSON.parse(`{${idMatches[0]}}`): {};
 
   return idObject.form_id;
 }
