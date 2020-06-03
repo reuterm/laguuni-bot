@@ -1,5 +1,5 @@
 const { getTimeSlots, formatTimeSlots } = require('./src/crawler/crawler');
-const { sendMessage } = require('./src/telegram/telegram');
+const { sendMessage, formatMessage } = require('./src/telegram/telegram');
 
 /**
  * Responds to any HTTP request.
@@ -13,7 +13,7 @@ exports.sendTimeSlotJson = async (req, res) => {
   const message = req.body.message;
 
   sendMessage({
-    timeSlots,
+    response: formatMessage(timeSlots),
     chatId: message.chat.id
   }, res);
 };
