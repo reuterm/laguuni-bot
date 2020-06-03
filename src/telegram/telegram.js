@@ -13,7 +13,11 @@ async function sendMessage(data, res) {
   };
 
   try {
-    await fetch(url, { method: 'post', body: payload });
+    await fetch(url, { 
+      method: 'POST', 
+      body: JSON.stringify(payload),
+		  headers: {'Content-Type': 'application/json'}
+    });
     res.send({ status: 'OK'});
   } catch(err) {
     console.log(err);

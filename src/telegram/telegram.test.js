@@ -75,12 +75,13 @@ describe('sendMessage()', () => {
       telegram.sendMessage(data, res);
       expect(fetch)
       .toHaveBeenCalledWith(expect.any(String), {
-        method: 'post',
-        body: {
+        method: 'POST',
+        body: JSON.stringify({
           chat_id: data.chatId,
-          parse_mode: 'MarkdownV2',
           text: data.response,
-        }
+          parse_mode: 'MarkdownV2',
+        }),
+        headers: {'Content-Type': 'application/json'},
       });
     });
   });

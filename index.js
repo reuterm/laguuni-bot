@@ -7,7 +7,7 @@ const { sendMessage, formatMessage } = require('./src/telegram/telegram');
  * @param {!express:Request} req HTTP request context.
  * @param {!express:Response} res HTTP response context.
  */
-exports.sendTimeSlotJson = async (req, res) => {
+exports.sendTimeSlots = async (req, res) => {
   const timeSlotsRaw = await getTimeSlots();
   const timeSlots = formatTimeSlots(timeSlotsRaw);
   const message = req.body.message;
