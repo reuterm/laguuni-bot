@@ -13,7 +13,7 @@ exports.sendTimeSlots = async (req, res) => {
   const timeSlotsRaw = await getTimeSlots();
   const message = req.body.message;
 
-  const date = getDate(message);
+  const date = getDate(message.text);
   const filteredTimeSlots = filterTimeSlots(date, timeSlotsRaw);
   const timeSlots = formatTimeSlots(filteredTimeSlots);
 

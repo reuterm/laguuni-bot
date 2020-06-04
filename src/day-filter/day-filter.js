@@ -26,7 +26,7 @@ function getNextDateOfWeekday(date, weekday) {
 
 function getDate(str) {
   const today = new Date();
-  const filter = str.toUpperCase();
+  const filter = String(str).toUpperCase();
   if (filter === 'TODAY') {
     return today;
   }
