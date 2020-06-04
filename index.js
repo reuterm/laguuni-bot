@@ -1,4 +1,4 @@
-const { getTimeSlots, formatTimeSlots } = require('./src/crawler/crawler');
+const { getTimeSlots } = require('./src/crawler/crawler');
 const { formatTimeSlots, filterTimeSlots } = require('./src/json/json');
 const { sendMessage, formatMessage } = require('./src/telegram/telegram');
 const { getDate } = require('./src/day-filter/day-filter');
