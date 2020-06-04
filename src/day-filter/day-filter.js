@@ -1,5 +1,6 @@
 const addDays = require('date-fns/addDays')
 const format = require('date-fns/format')
+const isDate = require('date-fns/isDate')
 
 WEEKDAYS = {
   SUNDAY: 0,
@@ -39,7 +40,7 @@ function getDate(str) {
 }
 
 function formatDate(date) {
-  return format(date, 'yyyy-MM-dd');
+  return isDate(date) ? format(date, 'yyyy-MM-dd') : null;
 }
 
 module.exports = {

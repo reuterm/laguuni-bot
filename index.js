@@ -1,6 +1,7 @@
 const { getTimeSlots, formatTimeSlots } = require('./src/crawler/crawler');
-const { formatTimeSlots } = require('./src/json/json');
+const { formatTimeSlots, filterTimeSlots } = require('./src/json/json');
 const { sendMessage, formatMessage } = require('./src/telegram/telegram');
+const { getDate } = require('./src/day-filter/day-filter');
 
 /**
  * Responds to any HTTP request.
@@ -10,8 +11,11 @@ const { sendMessage, formatMessage } = require('./src/telegram/telegram');
  */
 exports.sendTimeSlots = async (req, res) => {
   const timeSlotsRaw = await getTimeSlots();
-  const timeSlots = formatTimeSlots(timeSlotsRaw);
   const message = req.body.message;
+
+  const date = getDate(message);
+  const filteredTimeSlots = filterTimeSlots(date, timeSlotsRaw);
+  const timeSlots = formatTimeSlots(filteredTimeSlots);
 
   sendMessage({
     response: formatMessage(timeSlots),

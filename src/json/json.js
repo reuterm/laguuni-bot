@@ -1,3 +1,5 @@
+const { formatDate } = require('../day-filter/day-filter')
+
 function formatTimeSlots(timeSlots) {
   const dates = Object.keys(timeSlots);
   return dates.reduce((acc, date) => {
@@ -19,6 +21,12 @@ function formatTimeSlots(timeSlots) {
   }, {});
 }
 
+function filterTimeSlots(filter, timeSlots) {
+  const key = formatDate(filter);
+  return timeSlots[key] ? { [key]: timeSlots[key] } : timeSlots;
+}
+
 module.exports = {
   formatTimeSlots,
+  filterTimeSlots,
 };

@@ -110,8 +110,16 @@ describe('getDate()', () => {
 });
 
 describe('formatDate()',() => {
-  it('correctly formats date', () => {
-    const date = new Date(Date.UTC(2020, 5, 4));
-    expect(dayFilter.formatDate(date)).toEqual('2020-06-04');
+  describe('when passed value is a date', () => {
+    it('correctly formats date', () => {
+      const date = new Date(Date.UTC(2020, 5, 4));
+      expect(dayFilter.formatDate(date)).toEqual('2020-06-04');
+    });
   });
+
+  describe('when passed value is no date', () => {
+    it('returns null', () => {
+      expect(dayFilter.formatDate('foo')).toEqual(null);
+    });
+  })
 });
