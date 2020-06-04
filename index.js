@@ -1,4 +1,5 @@
 const { getTimeSlots, formatTimeSlots } = require('./src/crawler/crawler');
+const { formatTimeSlots } = require('./src/json/json');
 const { sendMessage, formatMessage } = require('./src/telegram/telegram');
 
 /**
