@@ -12,9 +12,9 @@ describe('formateDateSlots()', () => {
 
   it('returns list of formatted items', () => {
     expect(telegram.formatDateSlots(data)).toStrictEqual([
-      '* 1: 1',
-      '* 2: 2',
-      '* 3: 3',
+      '1: 1',
+      '2: 2',
+      '3: 3',
     ]);
   });
 
@@ -36,14 +36,14 @@ describe('formatMessage()', () => {
   it('correctly formats json', () => {
     const formatted =
     `Wednesday, June 3
-* 1: 1
-* 2: 2
-* 3: 3
+1: 1
+2: 2
+3: 3
 
 Thursday, June 4
-* 4: 4
-* 5: 5
-* 6: 6`;
+4: 4
+5: 5
+6: 6`;
     expect(telegram.formatMessage(data)).toMatch(formatted);
   });
 });
