@@ -15,11 +15,12 @@ async function sendMessage(data, res) {
   console.log('Sending payload', JSON.stringify(payload, null, 2));
 
   try {
-    await fetch(url, { 
+    const response = await fetch(url, { 
       method: 'POST', 
       body: JSON.stringify(payload),
 		  headers: {'Content-Type': 'application/json'}
     });
+    console.log(`Sending payload successful: ${response.ok}`);
     res.send({ status: 'OK'});
   } catch(err) {
     console.log(err);
