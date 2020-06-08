@@ -32,7 +32,7 @@ async function sendMessage(data, res) {
 }
 
 function formatDateSlots(dateSlots) {
-  return Object.keys(dateSlots).map((time) => `* ${time}: ${dateSlots[time]}`);
+  return Object.keys(dateSlots).map((time) => `${time}: ${dateSlots[time]}`);
 }
 
 function formatMessage(timeSlotJson) {
