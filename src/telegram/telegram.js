@@ -20,7 +20,10 @@ async function sendMessage(data, res) {
       body: JSON.stringify(payload),
 		  headers: {'Content-Type': 'application/json'}
     });
-    console.log(`Sending payload successful: ${response.ok}`);
+    if(!response.ok) {
+      const jsonResponse = await response.json();
+      console.log('Failed to send payload', JSON.stringify(jsonResponse, null, 2));
+    }
     res.send({ status: 'OK'});
   } catch(err) {
     console.log(err);
