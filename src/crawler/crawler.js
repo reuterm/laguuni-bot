@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const jsdom = require('jsdom')
+const jsdom = require('jsdom');
 
 const BASE_URL = 'https://laguuniin.fi/';
 const PRO_URL = 'https://laguuniin.fi/app/themes/LevelupSkele/templates/bookly_ajax.php?service=pro_kaapeli_keilis&location=1';
@@ -16,7 +16,7 @@ async function sendInitialRequest() {
 function getPhpSession(response) {
   const cookiesRaw = response.headers.get('set-cookie');
   const cookies = cookiesRaw.split(';');
-  return cookies.find((cookie) => cookie.includes('PHPSESSID'))
+  return cookies.find((cookie) => cookie.includes('PHPSESSID'));
 }
 
 async function getCsrfToken(response) {

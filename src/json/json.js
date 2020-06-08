@@ -1,4 +1,4 @@
-const { formatDate } = require('../day-filter/day-filter')
+const { formatDate } = require('../day-filter/day-filter');
 
 function formatTimeSlots(timeSlots) {
   const dates = Object.keys(timeSlots);
@@ -17,7 +17,7 @@ function formatTimeSlots(timeSlots) {
     return {
       ...acc,
       [date]: dateAcc,
-    }
+    };
   }, {});
 }
 

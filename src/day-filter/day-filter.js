@@ -1,6 +1,6 @@
-const addDays = require('date-fns/addDays')
-const format = require('date-fns/format')
-const isDate = require('date-fns/isDate')
+const addDays = require('date-fns/addDays');
+const format = require('date-fns/format');
+const isDate = require('date-fns/isDate');
 
 WEEKDAYS = {
   SUNDAY: 0,
@@ -49,4 +49,4 @@ module.exports = {
   getWeekdayNumber,
   getNextDateOfWeekday,
   getDate,
-}
+};

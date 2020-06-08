@@ -67,7 +67,7 @@ describe('filterTimeSlots()', () => {
 
   describe('when filter can not be applied', () => {
     it('does nothing', () => {
-      expect(json.filterTimeSlots('foobar', timeSlots)).toStrictEqual(timeSlots)
+      expect(json.filterTimeSlots('foobar', timeSlots)).toStrictEqual(timeSlots);
     });
   });
 });

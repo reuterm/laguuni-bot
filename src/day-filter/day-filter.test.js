@@ -55,7 +55,7 @@ describe('getDate()', () => {
   it('retruns correct date for today', () => {
     const today = new Date();
     expect(dayFilter.getDate('today').getDate()).toEqual(today.getDate());
-  })
+  });
 
   it('retruns correct date for tomorrow', () => {
     const tomorrow = addDays(new Date(), 1);
@@ -121,5 +121,5 @@ describe('formatDate()',() => {
     it('returns null', () => {
       expect(dayFilter.formatDate('foo')).toEqual(null);
     });
-  })
+  });
 });
