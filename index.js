@@ -11,7 +11,7 @@ const { getDate } = require('./src/day-filter/day-filter');
  */
 exports.sendTimeSlots = async (req, res) => {
   const timeSlotsRaw = await getTimeSlots();
-  const message = req.body.message;
+  const message = req.body.message.trim();
 
   console.log(`Received message: ${message.text}`);
 
