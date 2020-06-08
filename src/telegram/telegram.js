@@ -12,6 +12,8 @@ async function sendMessage(data, res) {
     parse_mode: 'MarkdownV2',
   };
 
+  console.log('Sending payload', JSON.stringify(payload, null, 2));
+
   try {
     await fetch(url, { 
       method: 'POST', 
