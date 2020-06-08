@@ -18,7 +18,6 @@ exports.sendTimeSlots = async (req, res) => {
   const date = getDate(message.text);
   console.log(`Interpreted date: ${date}`);
   const filteredTimeSlots = filterTimeSlots(date, timeSlotsRaw);
-  console.log(`${Object.keys(filterTimeSlots).length} days left after filtering`)
   const timeSlots = formatTimeSlots(filteredTimeSlots);
 
   sendMessage({
