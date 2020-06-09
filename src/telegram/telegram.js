@@ -44,8 +44,16 @@ function formatMessage(timeSlotJson) {
   return formattedDays.join('\n\n');
 }
 
+function sanitiseMessage(message) {
+  return String(message).trim()
+    .replace(/^\//, '')
+    .replace(process.env.TELEGRAM_BOT_NAME, '')
+    .trim();
+}
+
 module.exports = {
   sendMessage,
   formatMessage,
   formatDateSlots,
+  sanitiseMessage,
 };

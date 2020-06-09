@@ -1,6 +1,6 @@
 const { getTimeSlots } = require('./src/crawler/crawler');
 const { formatTimeSlots, filterTimeSlots } = require('./src/json/json');
-const { sendMessage, formatMessage } = require('./src/telegram/telegram');
+const { sendMessage, formatMessage, sanitiseMessage } = require('./src/telegram/telegram');
 const { getDate } = require('./src/day-filter/day-filter');
 
 /**
@@ -11,9 +11,9 @@ const { getDate } = require('./src/day-filter/day-filter');
  */
 exports.sendTimeSlots = async (req, res) => {
   const timeSlotsRaw = await getTimeSlots();
-  const message = req.body.message;
-
-  console.log('Received message', JSON.stringify(message, null, 2));
+  console.log('Received message', JSON.stringify(req.body.message, null, 2));
+  const message = sanitiseMessage(req.body.message);
+  console.log(`Sanitized message: ${message}`);
 
   const date = getDate(message.text);
   console.log(`Interpreted date: ${date}`);

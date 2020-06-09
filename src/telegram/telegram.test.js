@@ -108,3 +108,21 @@ describe('sendMessage()', () => {
     });
   });
 });
+
+describe('sanitiseMessage()', () => {
+  beforeEach(() => {
+    process.env = Object.assign(process.env, { TELEGRAM_BOT_NAME: '@myBot' });
+  });
+
+  it('trims whitespace', () => {
+    expect(telegram.sanitiseMessage('   some whitespace ')).toEqual('some whitespace');
+  });
+
+  it('removes leading forward slash', () => {
+    expect(telegram.sanitiseMessage('/some/message/')).toEqual('some/message/');
+  });
+
+  it('removes own bot name', () => {
+    expect(telegram.sanitiseMessage('@myBot hello')).toEqual('hello');
+  });
+});
