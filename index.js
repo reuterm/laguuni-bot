@@ -13,7 +13,7 @@ exports.sendTimeSlots = async (req, res) => {
   const timeSlotsRaw = await getTimeSlots();
   const message = req.body.message;
 
-  console.log(`Received message: ${message.text}`);
+  console.log('Received message', JSON.stringify(message, null, 2));
 
   const date = getDate(message.text);
   console.log(`Interpreted date: ${date}`);
