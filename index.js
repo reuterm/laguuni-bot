@@ -11,11 +11,13 @@ const { getDate } = require('./src/day-filter/day-filter');
  */
 exports.sendTimeSlots = async (req, res) => {
   const timeSlotsRaw = await getTimeSlots();
-  console.log('Received message', JSON.stringify(req.body.message, null, 2));
-  const message = sanitiseMessage(req.body.message);
-  console.log(`Sanitized message: ${message}`);
+  const message = req.body.message;
 
-  const date = getDate(message.text);
+  console.log('Received message', JSON.stringify(message, null, 2));
+  const sanitisedMessage = sanitiseMessage(message.text);
+  console.log(`Sanitised message: ${sanitisedMessage}`);
+
+  const date = getDate(sanitisedMessage);
   console.log(`Interpreted date: ${date}`);
   const filteredTimeSlots = filterTimeSlots(date, timeSlotsRaw);
   const timeSlots = formatTimeSlots(filteredTimeSlots);
