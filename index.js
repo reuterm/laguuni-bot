@@ -5,7 +5,7 @@ const {
   formatMessage,
   sanitiseMessage,
 } = require("./src/telegram/telegram");
-const { getDate } = require("./src/day-filter/day-filter");
+const { getDates } = require("./src/day-filter/day-filter");
 
 /**
  * Responds to any HTTP request.
