@@ -1,7 +1,8 @@
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
 
-const TELEGRAM_REPLY_URL = (token) => `https://api.telegram.org/bot${token}/sendMessage`;
-const DATE_OPTIONS = { weekday: 'long', month: 'long', day: 'numeric' };
+const TELEGRAM_REPLY_URL = (token) =>
+  `https://api.telegram.org/bot${token}/sendMessage`;
+const DATE_OPTIONS = { weekday: "long", month: "long", day: "numeric" };
 
 async function sendMessage(data, res) {
   const token = process.env.TELEGRAM_TOKEN;
@@ -9,23 +10,26 @@ async function sendMessage(data, res) {
   const payload = {
     chat_id: data.chatId,
     text: data.response,
-    parse_mode: 'MarkdownV2',
+    parse_mode: "MarkdownV2",
   };
 
-  console.log('Sending payload', JSON.stringify(payload, null, 2));
+  console.log("Sending payload", JSON.stringify(payload, null, 2));
 
   try {
-    const response = await fetch(url, { 
-      method: 'POST', 
+    const response = await fetch(url, {
+      method: "POST",
       body: JSON.stringify(payload),
-		  headers: {'Content-Type': 'application/json'}
+      headers: { "Content-Type": "application/json" },
     });
-    if(!response.ok) {
+    if (!response.ok) {
       const jsonResponse = await response.json();
-      console.log('Failed to send payload', JSON.stringify(jsonResponse, null, 2));
+      console.log(
+        "Failed to send payload",
+        JSON.stringify(jsonResponse, null, 2)
+      );
     }
-    res.send({ status: 'OK'});
-  } catch(err) {
+    res.send({ status: "OK" });
+  } catch (err) {
     console.log(err);
     res.sendStatus(500);
   }
@@ -37,17 +41,18 @@ function formatDateSlots(dateSlots) {
 
 function formatMessage(timeSlotJson) {
   const formattedDays = Object.keys(timeSlotJson).map((date) => {
-    const formattedDate = new Date(date).toLocaleString('en-GB', DATE_OPTIONS);
+    const formattedDate = new Date(date).toLocaleString("en-GB", DATE_OPTIONS);
     const formattedDateSlots = formatDateSlots(timeSlotJson[date]);
-    return `${formattedDate}\n${formattedDateSlots.join('\n')}`;
+    return `${formattedDate}\n${formattedDateSlots.join("\n")}`;
   });
-  return formattedDays.join('\n\n');
+  return formattedDays.join("\n\n");
 }
 
 function sanitiseMessage(message) {
-  return String(message).trim()
-    .replace(/^\//, '')
-    .replace(process.env.TELEGRAM_BOT_NAME, '')
+  return String(message)
+    .trim()
+    .replace(/^\//, "")
+    .replace(process.env.TELEGRAM_BOT_NAME, "")
     .trim();
 }
 

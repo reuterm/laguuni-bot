@@ -1,6 +1,6 @@
-const addDays = require('date-fns/addDays');
-const format = require('date-fns/format');
-const isDate = require('date-fns/isDate');
+const addDays = require("date-fns/addDays");
+const format = require("date-fns/format");
+const isDate = require("date-fns/isDate");
 
 WEEKDAYS = {
   SUNDAY: 0,
@@ -11,7 +11,6 @@ WEEKDAYS = {
   FRIDAY: 5,
   SATURDAY: 6,
 };
-
 
 function getWeekdayNumber(day) {
   const number = WEEKDAYS[day.toUpperCase()];
@@ -27,11 +26,11 @@ function getNextDateOfWeekday(date, weekday) {
 function getDate(str) {
   const today = new Date();
   const filter = String(str).trim().toUpperCase();
-  if (filter === 'TODAY') {
+  if (filter === "TODAY") {
     return today;
   }
 
-  if (filter === 'TOMORROW') {
+  if (filter === "TOMORROW") {
     return addDays(today, 1);
   }
 
@@ -40,7 +39,7 @@ function getDate(str) {
 }
 
 function formatDate(date) {
-  return isDate(date) ? format(date, 'yyyy-MM-dd') : null;
+  return isDate(date) ? format(date, "yyyy-MM-dd") : null;
 }
 
 module.exports = {
