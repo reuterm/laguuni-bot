@@ -15,6 +15,13 @@ const getJson = () => ({
       { time_text: "12:00:00", additional_text: "[3/4]" },
     ],
   },
+  "2020-06-06": {
+    slots: [
+      { time_text: "10:00:00", additional_text: "[1/4]" },
+      { time_text: "11:00:00", additional_text: "[0/4]" },
+      { time_text: "12:00:00", additional_text: "[2/4]" },
+    ],
+  },
 });
 
 describe("formatTimeSlots()", () => {
@@ -71,15 +78,21 @@ describe("filterTimeSlots()", () => {
 
   describe("when filter can be applied", () => {
     it("correctly filters slots", () => {
-      const filter = new Date(Date.UTC(2020, 5, 4));
+      const filter = [
+        new Date(Date.UTC(2020, 5, 4)),
+        new Date(Date.UTC(2020, 5, 6)),
+      ];
       const filteredJson = json.filterTimeSlots(filter, timeSlots);
-      expect(Object.keys(filteredJson)).toStrictEqual(["2020-06-04"]);
+      expect(Object.keys(filteredJson)).toStrictEqual([
+        "2020-06-04",
+        "2020-06-06",
+      ]);
     });
   });
 
   describe("when filter can not be applied", () => {
     it("does nothing", () => {
-      expect(json.filterTimeSlots("foobar", timeSlots)).toStrictEqual(
+      expect(json.filterTimeSlots(["foobar"], timeSlots)).toStrictEqual(
         timeSlots
       );
     });

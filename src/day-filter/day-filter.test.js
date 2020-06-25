@@ -52,61 +52,63 @@ describe("getWeekdayNumber()", () => {
   });
 });
 
-describe("getDate()", () => {
+describe("convertToDate()", () => {
   it("retruns correct date for today", () => {
     const today = new Date();
-    expect(dayFilter.getDate("today").getDate()).toEqual(today.getDate());
+    expect(dayFilter.convertToDate("today").getDate()).toEqual(today.getDate());
   });
 
   it("retruns correct date for tomorrow", () => {
     const tomorrow = addDays(new Date(), 1);
-    expect(dayFilter.getDate("tomorrow").getDate()).toEqual(tomorrow.getDate());
+    expect(dayFilter.convertToDate("tomorrow").getDate()).toEqual(
+      tomorrow.getDate()
+    );
   });
 
   it("returns correct date for next Sunday", () => {
-    const futureSunday = dayFilter.getDate("sunday");
+    const futureSunday = dayFilter.convertToDate("sunday");
     expect(futureSunday.getDay()).toBe(0);
     expect(isAfter(futureSunday, new Date())).toBe(true);
   });
 
   it("returns correct date for next Monday", () => {
-    const futureMonday = dayFilter.getDate("monday");
+    const futureMonday = dayFilter.convertToDate("monday");
     expect(futureMonday.getDay()).toBe(1);
     expect(isAfter(futureMonday, new Date())).toBe(true);
   });
 
   it("returns correct date for next Tuesday", () => {
-    const futureTuesday = dayFilter.getDate("tuesday");
+    const futureTuesday = dayFilter.convertToDate("tuesday");
     expect(futureTuesday.getDay()).toBe(2);
     expect(isAfter(futureTuesday, new Date())).toBe(true);
   });
 
   it("returns correct date for next Wednesday", () => {
-    const futureWednesday = dayFilter.getDate("wednesday");
+    const futureWednesday = dayFilter.convertToDate("wednesday");
     expect(futureWednesday.getDay()).toBe(3);
     expect(isAfter(futureWednesday, new Date())).toBe(true);
   });
 
   it("returns correct date for next Thursday", () => {
-    const futureThursday = dayFilter.getDate("thursday");
+    const futureThursday = dayFilter.convertToDate("thursday");
     expect(futureThursday.getDay()).toBe(4);
     expect(isAfter(futureThursday, new Date())).toBe(true);
   });
 
   it("returns correct date for next Friday", () => {
-    const futureFriday = dayFilter.getDate("friday");
+    const futureFriday = dayFilter.convertToDate("friday");
     expect(futureFriday.getDay()).toBe(5);
     expect(isAfter(futureFriday, new Date())).toBe(true);
   });
 
   it("returns correct date for next Saturday", () => {
-    const futureSaturday = dayFilter.getDate("saturday");
+    const futureSaturday = dayFilter.convertToDate("saturday");
     expect(futureSaturday.getDay()).toBe(6);
     expect(isAfter(futureSaturday, new Date())).toBe(true);
   });
 
   it("returns null for unkown string", () => {
-    expect(dayFilter.getDate("foobar")).toBe(null);
+    expect(dayFilter.convertToDate("foobar")).toBe(null);
   });
 });
 
@@ -121,6 +123,50 @@ describe("formatDate()", () => {
   describe("when passed value is no date", () => {
     it("returns null", () => {
       expect(dayFilter.formatDate("foo")).toEqual(null);
+    });
+  });
+});
+
+describe("getDates()", () => {
+  describe("when string only contains one day", () => {
+    let filters;
+
+    beforeEach(() => {
+      filters = dayFilter.getDates("today");
+    });
+
+    it("returns list of single item", () => {
+      expect(filters).toHaveLength(1);
+    });
+
+    it("returns correct date", () => {
+      expect(filters[0].getDate()).toEqual(new Date().getDate());
+    });
+  });
+
+  describe("when string contains multiple days", () => {
+    let filters;
+
+    beforeEach(() => {
+      filters = dayFilter.getDates("today and tomorrow");
+    });
+
+    it("returns list of of correct length", () => {
+      expect(filters).toHaveLength(2);
+    });
+
+    it("return correct dates", () => {
+      const today = new Date();
+      expect(filters.map((date) => date.getDate())).toStrictEqual([
+        today.getDate(),
+        addDays(today, 1).getDate(),
+      ]);
+    });
+  });
+
+  describe("when string contains no days", () => {
+    it("returns list of null", () => {
+      expect(dayFilter.getDates("foobar")).toStrictEqual([null]);
     });
   });
 });

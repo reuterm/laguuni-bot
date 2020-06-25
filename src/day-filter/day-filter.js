@@ -23,19 +23,25 @@ function getNextDateOfWeekday(date, weekday) {
   return addDays(date, daysToAdd);
 }
 
-function getDate(str) {
+function convertToDate(filter) {
   const today = new Date();
-  const filter = String(str).trim().toUpperCase();
-  if (filter === "TODAY") {
+  if (filter.toUpperCase() === "TODAY") {
     return today;
   }
 
-  if (filter === "TOMORROW") {
+  if (filter.toUpperCase() === "TOMORROW") {
     return addDays(today, 1);
   }
 
   const weekday = getWeekdayNumber(filter);
   return weekday > -1 ? getNextDateOfWeekday(today, weekday) : null;
+}
+
+function getDates(str) {
+  const filters = String(str)
+    .split("and")
+    .map((item) => item.trim());
+  return filters.map(convertToDate);
 }
 
 function formatDate(date) {
@@ -45,7 +51,8 @@ function formatDate(date) {
 module.exports = {
   WEEKDAYS,
   formatDate,
+  convertToDate,
   getWeekdayNumber,
   getNextDateOfWeekday,
-  getDate,
+  getDates,
 };

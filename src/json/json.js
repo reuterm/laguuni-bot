@@ -1,3 +1,5 @@
+const pickBy = require("lodash/pickBy");
+const isEmpty = require("lodash/isEmpty");
 const { formatDate } = require("../day-filter/day-filter");
 
 function formatTimeSlots(timeSlots) {
@@ -21,9 +23,10 @@ function formatTimeSlots(timeSlots) {
   }, {});
 }
 
-function filterTimeSlots(filter, timeSlots) {
-  const key = formatDate(filter);
-  return timeSlots[key] ? { [key]: timeSlots[key] } : timeSlots;
+function filterTimeSlots(filters, timeSlots) {
+  const keys = filters.map((filter) => formatDate(filter));
+  const filtered = pickBy(timeSlots, (_, key) => keys.includes(key));
+  return isEmpty(filtered) ? timeSlots : filtered;
 }
 
 module.exports = {

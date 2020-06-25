@@ -21,9 +21,9 @@ exports.sendTimeSlots = async (req, res) => {
   const sanitisedMessage = sanitiseMessage(message.text);
   console.log(`Sanitised message: ${sanitisedMessage}`);
 
-  const date = getDate(sanitisedMessage);
-  console.log(`Interpreted date: ${date}`);
-  const filteredTimeSlots = filterTimeSlots(date, timeSlotsRaw);
+  const dates = getDates(sanitisedMessage);
+  console.log(`Interpreted date: ${dates}`);
+  const filteredTimeSlots = filterTimeSlots(dates, timeSlotsRaw);
   const timeSlots = formatTimeSlots(filteredTimeSlots);
 
   sendMessage(
