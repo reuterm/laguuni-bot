@@ -9,10 +9,10 @@ const { getDates } = require("./src/day-filter/day-filter");
 
 function processMessage(message, timeSlots) {
   const sanitisedMessage = sanitiseMessage(message);
-  console.log(`Sanitised message: ${sanitisedMessage}`);
+  console.log("Sanitised message", sanitisedMessage);
 
   const dates = getDates(sanitisedMessage);
-  console.log(`Interpreted dates: ${dates}`);
+  console.log("Interpreted dates", dates);
 
   const filteredTimeSlots = filterTimeSlots(dates, timeSlots);
   return formatTimeSlots(filteredTimeSlots);
