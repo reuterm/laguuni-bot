@@ -3,13 +3,11 @@ const { formatTimeSlots, filterTimeSlots } = require("./src/json/json");
 const { formatMessage } = require("./src/telegram/telegram");
 const { getDates } = require("./src/day-filter/day-filter");
 
-const HELP_MESSAGE = `
-  Get booking information of Laguuni's Pro Cable
+const HELP_MESSAGE = `Get booking information of Laguunis Pro Cable
 
-  Send 'all' to get all alvailable information. Alternatively, you can filter by day.
-  For example, send 'today' or 'tomorrow and tuesday' to only receive information for
-  the specified days.
-`;
+Usage:
+_*all*_: All available information
+_*\\<day\\>*_: Filter information by days\\. Here,_*\\<day\\>*_ can be any weekday or _*today*_ as well as *_tomorrow_*\\. You can chain mulitple days with _*and*_\\.`;
 
 function processTimeSlots(message, timeSlots, includeAll) {
   if (includeAll) {
@@ -49,3 +47,5 @@ module.exports = {
   processMessage,
   processTimeSlots,
 };
+
+console.log(JSON.stringify(HELP_MESSAGE));
