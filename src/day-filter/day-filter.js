@@ -34,7 +34,6 @@ function convertToDate(filter) {
   }
 
   const weekday = getWeekdayNumber(filter);
-  console.log("Weekday number", weekday);
   return weekday > -1 ? getNextDateOfWeekday(today, weekday) : null;
 }
 
@@ -42,9 +41,7 @@ function getDates(str) {
   const filters = String(str)
     .split("and")
     .map((item) => item.trim());
-  console.log("Filters", filters);
   const converted = filters.map(convertToDate);
-  console.log("Converted", converted);
   return converted;
 }
 
