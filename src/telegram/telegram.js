@@ -18,7 +18,7 @@ async function sendMessage(data) {
     parse_mode: "MarkdownV2",
   };
 
-  console.log("Sending payload", JSON.stringify(payload, null, 2));
+  console.log("Sending payload:", JSON.stringify(payload, null, 2));
 
   try {
     const res = await fetch(url, {
@@ -29,7 +29,7 @@ async function sendMessage(data) {
     if (!res.ok) {
       const jsonResponse = await res.json();
       console.log(
-        "Failed to send payload",
+        "Failed to send payload:",
         JSON.stringify(jsonResponse, null, 2)
       );
     }
