@@ -7,24 +7,29 @@ const {
 } = require("./src/telegram/telegram");
 const { getDates } = require("./src/day-filter/day-filter");
 
+function processMessage(message, timeSlots) {
+  const sanitisedMessage = sanitiseMessage(message);
+  console.log(`Sanitised message: ${sanitisedMessage}`);
+
+  const dates = getDates(sanitisedMessage);
+  console.log(`Interpreted dates: ${dates}`);
+
+  const filteredTimeSlots = filterTimeSlots(dates, timeSlots);
+  return formatTimeSlots(filteredTimeSlots);
+}
+
 /**
  * Responds to any HTTP request.
  *
  * @param {!express:Request} req HTTP request context.
  * @param {!express:Response} res HTTP response context.
  */
-exports.sendTimeSlots = async (req, res) => {
+async function sendTimeSlots(req, res) {
   const timeSlotsRaw = await getTimeSlots();
   const message = req.body.message;
-
   console.log("Received message", JSON.stringify(message, null, 2));
-  const sanitisedMessage = sanitiseMessage(message.text);
-  console.log(`Sanitised message: ${sanitisedMessage}`);
 
-  const dates = getDates(sanitisedMessage);
-  console.log(`Interpreted date: ${dates}`);
-  const filteredTimeSlots = filterTimeSlots(dates, timeSlotsRaw);
-  const timeSlots = formatTimeSlots(filteredTimeSlots);
+  const timeSlots = processMessage(message.text, timeSlotsRaw);
 
   sendMessage(
     {
@@ -33,4 +38,9 @@ exports.sendTimeSlots = async (req, res) => {
     },
     res
   );
+}
+
+module.exports = {
+  processMessage,
+  sendTimeSlots,
 };
