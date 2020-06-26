@@ -11,7 +11,6 @@
   "dependencies": {
     "date-fns": "^2.14.0",
     "jsdom": "^16.2.2",
-    "lodash": "^4.17.15",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
