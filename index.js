@@ -1,22 +1,5 @@
-const { getTimeSlots } = require("./src/crawler/crawler");
-const { formatTimeSlots, filterTimeSlots } = require("./src/json/json");
-const {
-  sendMessage,
-  formatMessage,
-  sanitiseMessage,
-} = require("./src/telegram/telegram");
-const { getDates } = require("./src/day-filter/day-filter");
-
-function processMessage(message, timeSlots) {
-  const sanitisedMessage = sanitiseMessage(message);
-  console.log("Sanitised message", sanitisedMessage);
-
-  const dates = getDates(sanitisedMessage);
-  console.log("Interpreted dates", dates);
-
-  const filteredTimeSlots = filterTimeSlots(dates, timeSlots);
-  return formatTimeSlots(filteredTimeSlots);
-}
+const { sendMessage, sanitiseMessage } = require("./src/telegram/telegram");
+const { processMessage } = require("./bot");
 
 /**
  * Responds to any HTTP request.
@@ -24,23 +7,26 @@ function processMessage(message, timeSlots) {
  * @param {!express:Request} req HTTP request context.
  * @param {!express:Response} res HTTP response context.
  */
-async function sendTimeSlots(req, res) {
-  const timeSlotsRaw = await getTimeSlots();
+async function handleRequest(req, res) {
   const message = req.body.message;
-  console.log("Received message", JSON.stringify(message, null, 2));
+  console.log("Received message:", JSON.stringify(message, null, 2));
 
-  const timeSlots = processMessage(message.text, timeSlotsRaw);
+  const sanitisedMessage = sanitiseMessage(message.text);
+  console.log("Sanitised message:", sanitisedMessage);
 
-  sendMessage(
-    {
-      response: formatMessage(timeSlots),
+  try {
+    const data = await processMessage(sanitisedMessage);
+    await sendMessage({
+      response: data,
       chatId: message.chat.id,
-    },
-    res
-  );
+    });
+    res.send({ status: "OK" });
+  } catch (err) {
+    console.error(err);
+    res.sendStatus(500);
+  }
 }
 
 module.exports = {
-  processMessage,
-  sendTimeSlots,
+  handleRequest,
 };

@@ -1,53 +1,66 @@
-const addDays = require("date-fns/addDays");
-const { formatDate } = require("./src/day-filter/day-filter");
-const { processMessage } = require("./index");
+jest.mock("node-fetch");
+const fetch = require("node-fetch");
+const { Response } = jest.requireActual("node-fetch");
+const { handleRequest } = require("./index");
 
-const today = new Date();
-
-const getJson = () => ({
-  [formatDate(today)]: {
-    slots: [
-      { time_text: "10:00:00", additional_text: "[0/4]" },
-      { time_text: "11:00:00", additional_text: "[1/4]" },
-      { time_text: "12:00:00", additional_text: "[2/4]" },
-    ],
-  },
-  [formatDate(addDays(today, 1))]: {
-    slots: [
-      { time_text: "10:00:00", additional_text: "[0/4]" },
-      { time_text: "11:00:00", additional_text: "[1/4]" },
-      { time_text: "12:00:00", additional_text: "[3/4]" },
-    ],
+const buildReq = (text) => ({
+  body: {
+    message: {
+      text,
+      chat: {
+        id: "someId",
+      },
+    },
   },
 });
 
-describe("processMessage()", () => {
-  describe("when message only contains one day", () => {
-    it("returns correct data", () => {
-      expect(processMessage("today", getJson())).toStrictEqual({
-        [formatDate(today)]: {
-          "10:00:00": "[0/4]",
-          "11:00:00": "[1/4]",
-          "12:00:00": "[2/4]",
-        },
-      });
+describe("handleRequest()", () => {
+  let res;
+
+  beforeEach(() => {
+    res = {
+      send: jest.fn(),
+      sendStatus: jest.fn(),
+    };
+    fetch.mockReset();
+  });
+
+  describe("when received message requires response", () => {
+    beforeEach(async () => {
+      fetch.mockReturnValue(Promise.resolve(new Response()));
+      await handleRequest(buildReq("help"), res);
+    });
+    it("sends response to the chat", () => {
+      expect(fetch).toHaveBeenCalledTimes(1);
+    });
+
+    it("responds to request", () => {
+      expect(res.send).toHaveBeenCalledWith({ status: "OK" });
     });
   });
 
-  describe("when message only contains multiple days", () => {
-    it("returns correct data", () => {
-      expect(processMessage("today and tomorrow", getJson())).toStrictEqual({
-        [formatDate(today)]: {
-          "10:00:00": "[0/4]",
-          "11:00:00": "[1/4]",
-          "12:00:00": "[2/4]",
-        },
-        [formatDate(addDays(today, 1))]: {
-          "10:00:00": "[0/4]",
-          "11:00:00": "[1/4]",
-          "12:00:00": "[3/4]",
-        },
-      });
+  describe("when received message does not require response", () => {
+    beforeEach(async () => {
+      fetch.mockReturnValue(Promise.resolve(new Response()));
+      await handleRequest(buildReq(""), res);
+    });
+    it("does not send response to the chat", () => {
+      expect(fetch).not.toHaveBeenCalled();
+    });
+
+    it("responds to request", () => {
+      expect(res.send).toHaveBeenCalledWith({ status: "OK" });
+    });
+  });
+
+  describe("when sending response to the chat fails", () => {
+    beforeEach(async () => {
+      fetch.mockReturnValue(Promise.reject(new Error("error")));
+      await handleRequest(buildReq("help"), res);
+    });
+
+    it("responds to request with error", () => {
+      expect(res.sendStatus).toHaveBeenCalledWith(500);
     });
   });
 });

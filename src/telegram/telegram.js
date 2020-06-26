@@ -4,7 +4,12 @@ const TELEGRAM_REPLY_URL = (token) =>
   `https://api.telegram.org/bot${token}/sendMessage`;
 const DATE_OPTIONS = { weekday: "long", month: "long", day: "numeric" };
 
-async function sendMessage(data, res) {
+async function sendMessage(data) {
+  if (!data.response || data.response.length === 0) {
+    console.log("No response, skipping");
+    return;
+  }
+
   const token = process.env.TELEGRAM_TOKEN;
   const url = TELEGRAM_REPLY_URL(token);
   const payload = {
@@ -16,22 +21,20 @@ async function sendMessage(data, res) {
   console.log("Sending payload", JSON.stringify(payload, null, 2));
 
   try {
-    const response = await fetch(url, {
+    const res = await fetch(url, {
       method: "POST",
       body: JSON.stringify(payload),
       headers: { "Content-Type": "application/json" },
     });
-    if (!response.ok) {
-      const jsonResponse = await response.json();
+    if (!res.ok) {
+      const jsonResponse = await res.json();
       console.log(
         "Failed to send payload",
         JSON.stringify(jsonResponse, null, 2)
       );
     }
-    res.send({ status: "OK" });
   } catch (err) {
-    console.log(err);
-    res.sendStatus(500);
+    throw err;
   }
 }
 

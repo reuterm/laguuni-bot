@@ -34,7 +34,7 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
           service_account_key: ${{ secrets.GCP_SA_KEY }}
       - name: Deploy
-        run: gcloud functions deploy laguuni-slots-bot --region europe-west3 --entry-point sendTimeSlots --runtime nodejs10 --trigger-http --allow-unauthenticated --set-env-vars "TELEGRAM_TOKEN=$TELEGRAM_TOKEN,TELEGRAM_BOT_NAME=$TELEGRAM_BOT_NAME"
+        run: gcloud functions deploy laguuni-slots-bot --region europe-west3 --entry-point handleRequest --runtime nodejs10 --trigger-http --allow-unauthenticated --set-env-vars "TELEGRAM_TOKEN=$TELEGRAM_TOKEN,TELEGRAM_BOT_NAME=$TELEGRAM_BOT_NAME"
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_BOT_NAME: ${{ secrets.TELEGRAM_BOT_NAME }}
