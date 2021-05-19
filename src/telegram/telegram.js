@@ -38,13 +38,17 @@ async function sendMessage(data) {
   }
 }
 
+function formatToHumanDate(date) {
+  return new Date(date).toLocaleString("en-US", DATE_OPTIONS);
+}
+
 function formatDateSlots(dateSlots) {
   return Object.keys(dateSlots).map((time) => `${time}: ${dateSlots[time]}`);
 }
 
 function formatMessage(timeSlotJson) {
   const formattedDays = Object.keys(timeSlotJson).map((date) => {
-    const formattedDate = new Date(date).toLocaleString("en-GB", DATE_OPTIONS);
+    const formattedDate = formatToHumanDate(date);
     const formattedDateSlots = formatDateSlots(timeSlotJson[date]);
     return `${formattedDate}\n${formattedDateSlots.join("\n")}`;
   });
@@ -62,6 +66,7 @@ function sanitiseMessage(message) {
 module.exports = {
   sendMessage,
   formatMessage,
+  formatToHumanDate,
   formatDateSlots,
   sanitiseMessage,
 };

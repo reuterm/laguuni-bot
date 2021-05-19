@@ -1,121 +1,128 @@
 const json = require("./json");
 
-const getJson = () => ({
-  "2020-06-04": {
-    slots: [
-      { time_text: "10:00:00", additional_text: "[0/4]" },
-      { time_text: "11:00:00", additional_text: "[1/4]" },
-      { time_text: "12:00:00", additional_text: "[2/4]" },
+describe("json", () => {
+  const getRawJson = () => ({
+    "2021-05-19": [
+      { starttimes: ["10:00", "11:00", "12:00"] },
+      { starttimes: ["10:00", "11:00", "12:00"] },
+      { starttimes: ["10:00", "11:00"] },
+      { starttimes: ["10:00"] },
     ],
-  },
-  "2020-06-05": {
-    slots: [
-      { time_text: "10:00:00", additional_text: "[0/4]" },
-      { time_text: "11:00:00", additional_text: "[1/4]" },
-      { time_text: "12:00:00", additional_text: "[3/4]" },
+    "2021-05-20": [
+      { starttimes: ["10:00", "11:00", "12:00"] },
+      { starttimes: ["10:00", "11:00"] },
+      { starttimes: ["10:00", "11:00"] },
+      { starttimes: ["10:00"] },
     ],
-  },
-  "2020-06-06": {
-    slots: [
-      { time_text: "10:00:00", additional_text: "[1/4]" },
-      { time_text: "11:00:00", additional_text: "[0/4]" },
-      { time_text: "12:00:00", additional_text: "[2/4]" },
+    "2021-05-21": [
+      { starttimes: ["10:00", "11:00", "12:00"] },
+      { starttimes: ["10:00", "11:00", "12:00"] },
+      { starttimes: ["10:00", "11:00"] },
+      { starttimes: ["11:00"] },
     ],
-  },
-});
-
-describe("formatTimeSlots()", () => {
-  let timeSlots;
-
-  beforeEach(() => {
-    timeSlots = getJson();
   });
 
-  it("includes all days", () => {
-    const formatted = json.formatTimeSlots(timeSlots);
-    expect(Object.keys(formatted).length).toBe(Object.keys(timeSlots).length);
+  const getStrippedJson = () => ({
+    "2021-05-19": {
+      1: ["10:00", "11:00", "12:00"],
+      2: ["10:00", "11:00", "12:00"],
+      3: ["10:00", "11:00"],
+      4: ["10:00"],
+    },
+    "2021-05-20": {
+      1: ["10:00", "11:00", "12:00"],
+      2: ["10:00", "11:00"],
+      3: ["10:00", "11:00"],
+      4: ["10:00"],
+    },
+    "2021-05-21": {
+      1: ["10:00", "11:00", "12:00"],
+      2: ["10:00", "11:00", "12:00"],
+      3: ["10:00", "11:00"],
+      4: ["11:00"],
+    },
   });
 
-  it("filters out full time slots", () => {
-    const day = "2020-06-04";
-    const data = {
-      [day]: {
-        ...timeSlots.firstDay,
-        slots: [
-          ...timeSlots[day].slots,
-          { additional_text: "", time_text: "13:00:00" },
-        ],
-      },
-    };
-    const existingSlots = data[day].slots.length;
-    const formatted = json.formatTimeSlots(data);
-    expect(Object.keys(formatted[day]).length).toBe(existingSlots - 1);
+  const getFormattedJson = () => ({
+    "2021-05-19": {
+      "10:00": "0/4",
+      "11:00": "1/4",
+      "12:00": "2/4",
+    },
+    "2021-05-20": {
+      "10:00": "0/4",
+      "11:00": "1/4",
+      "12:00": "3/4",
+    },
+    "2021-05-21": {
+      "10:00": "1/4",
+      "11:00": "0/4",
+      "12:00": "2/4",
+    },
   });
 
-  it("returns correct json", () => {
-    const formatted = json.formatTimeSlots(timeSlots);
-    expect(formatted).toMatchObject({
-      "2020-06-04": {
-        "10:00:00": "[0/4]",
-        "11:00:00": "[1/4]",
-        "12:00:00": "[2/4]",
-      },
-      "2020-06-05": {
-        "10:00:00": "[0/4]",
-        "11:00:00": "[1/4]",
-        "12:00:00": "[3/4]",
-      },
+  describe("extractDateCountCombinations()", () => {
+    it("includes all days", () => {
+      expect(json.extractDateCountCombinations(getRawJson())).toMatchObject(
+        getStrippedJson()
+      );
     });
-  });
-});
 
-describe("filterTimeSlots()", () => {
-  let timeSlots;
-
-  beforeEach(() => {
-    timeSlots = getJson();
-  });
-
-  describe("when filter can be applied", () => {
-    it("correctly filters slots", () => {
-      const filter = [
-        new Date(Date.UTC(2020, 5, 4)),
-        new Date(Date.UTC(2020, 5, 6)),
-      ];
-      const filteredJson = json.filterTimeSlots(filter, timeSlots);
-      expect(Object.keys(filteredJson)).toStrictEqual([
-        "2020-06-04",
-        "2020-06-06",
-      ]);
+    it("strips unwanted data", () => {
+      const slotsData = {
+        "2021-05-19": [{ starttimes: ["10:00"], foo: "bar", bar: 1 }],
+      };
+      expect(json.extractDateCountCombinations(slotsData)).toMatchObject({
+        "2021-05-19": {
+          1: ["10:00"],
+        },
+      });
     });
   });
 
-  describe("when filters contain duplicates", () => {
-    it("correctly filter slots", () => {
-      const filter = [
-        new Date(Date.UTC(2020, 5, 4)),
-        new Date(Date.UTC(2020, 5, 6)),
-        new Date(Date.UTC(2020, 5, 4)),
-      ];
-      const filteredJson = json.filterTimeSlots(filter, timeSlots);
-      expect(Object.keys(filteredJson)).toStrictEqual([
-        "2020-06-04",
-        "2020-06-06",
-      ]);
+  describe("mergeDays()", () => {
+    it("correctly merges data of same days", () => {
+      expect(json.mergeDays(getStrippedJson())).toMatchObject(
+        getFormattedJson()
+      );
+    });
+
+    it("handles empty days", () => {
+      const empty = {
+        "2021-05-19": {
+          1: [],
+          2: [],
+          3: [],
+          4: [],
+        },
+      };
+      expect(json.mergeDays(empty)).toMatchObject({
+        "2021-05-19": {},
+      });
     });
   });
 
-  describe("when filters an only be partially applied", () => {
-    it("correctly filter slots", () => {
-      const filter = [null, new Date(Date.UTC(2020, 5, 6))];
-      const filteredJson = json.filterTimeSlots(filter, timeSlots);
-      expect(Object.keys(filteredJson)).toStrictEqual(["2020-06-06"]);
+  describe("removeEmptyDays()", () => {
+    it("removes days with not available slots", () => {
+      expect(
+        json.removeEmptyDays({
+          "2021-05-19": {},
+          "2021-05-20": {
+            "10:00": "1/4",
+          },
+        })
+      ).toMatchObject({
+        "2021-05-20": {
+          "10:00": "1/4",
+        },
+      });
     });
   });
 
-  describe("when filter can not be applied", () => {
-    it("returns empty boject", () => {
-      expect(json.filterTimeSlots(["foobar"], timeSlots)).toStrictEqual({});
+  describe("formatTimeSlots()", () => {
+    it("correctly formats raw slots data", () => {
+      const data = { ...getRawJson(), "2021-05-23": [] };
+      expect(json.formatTimeSlots(data)).toMatchObject(getFormattedJson());
     });
   });
 });

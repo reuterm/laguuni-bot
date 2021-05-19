@@ -1,5 +1,5 @@
 {
-  "name": "laguuni-slots",
+  "name": "laguuni-bot",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -10,7 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "date-fns": "^2.14.0",
-    "jsdom": "^16.2.2",
     "node-fetch": "^2.6.1"
   },
   "devDependencies": {
