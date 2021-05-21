@@ -42,7 +42,7 @@ function getDates(str) {
     .split("and")
     .map((item) => item.trim());
   const converted = filters.map(convertToDate);
-  return converted;
+  return converted.filter((date) => Boolean(date));
 }
 
 function formatDate(date) {
