@@ -36,20 +36,20 @@ Thursday, June 4
     });
   });
 
-  describe("formatMessage()", () => {
+  describe("formatDays()", () => {
     describe("when json includes data", () => {
       it("correctly formats json", () => {
         const data = {
           "2020-06-03": { 1: "1", 2: "2", 3: "3" },
           "2020-06-04": { 4: "4", 5: "5", 6: "6" },
         };
-        expect(telegram.formatMessage(data)).toEqual(FORMATTED);
+        expect(telegram.formatDays(data)).toEqual(FORMATTED);
       });
     });
 
     describe("when json is empty", () => {
       it("return empty string", () => {
-        expect(telegram.formatMessage({})).toEqual("");
+        expect(telegram.formatDays({})).toEqual("");
       });
     });
   });

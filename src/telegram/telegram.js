@@ -1,6 +1,9 @@
 const fetch = require("node-fetch");
 
 const ESCAPE_CHARS = /[<>!\.]/g;
+const LAGUUNI_FIXER_URL =
+  "http://laguuni-fixer-public.s3-website-eu-west-1.amazonaws.com";
+const OVERVIEW_LINK = `[Overview](${LAGUUNI_FIXER_URL})`;
 const TELEGRAM_REPLY_URL = (token) =>
   `https://api.telegram.org/bot${token}/sendMessage`;
 const DATE_OPTIONS = { weekday: "long", month: "long", day: "numeric" };
@@ -47,13 +50,19 @@ function formatDateSlots(dateSlots) {
   return Object.keys(dateSlots).map((time) => `${time}: ${dateSlots[time]}`);
 }
 
-function formatMessage(timeSlotJson) {
+function formatDays(timeSlotJson) {
   const formattedDays = Object.keys(timeSlotJson).map((date) => {
     const formattedDate = formatToHumanDate(date);
     const formattedDateSlots = formatDateSlots(timeSlotJson[date]);
     return `${formattedDate}\n${formattedDateSlots.join("\n")}`;
   });
   return formattedDays.join("\n\n");
+}
+
+function formatMessage(timeSlotJson) {
+  const formattedDays = formatDays(timeSlotJson);
+
+  return `${formattedDays}\n\n${OVERVIEW_LINK}`;
 }
 
 function sanitiseMessage(message) {
@@ -65,14 +74,16 @@ function sanitiseMessage(message) {
 }
 
 function escapeMarkdown(message) {
-  return message.replace(ESCAPE_CHARS, '\\$&');
+  return message.replace(ESCAPE_CHARS, "\\$&");
 }
 
 module.exports = {
   sendMessage,
   formatMessage,
+  formatDays,
   formatToHumanDate,
   formatDateSlots,
   sanitiseMessage,
   escapeMarkdown,
+  OVERVIEW_LINK,
 };

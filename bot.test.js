@@ -2,7 +2,7 @@ jest.mock("./src/client/client");
 const addDays = require("date-fns/addDays");
 const client = require("./src/client/client");
 const { formatDate } = require("./src/day-filter/day-filter");
-const { formatToHumanDate } = require("./src/telegram/telegram");
+const { formatToHumanDate, OVERVIEW_LINK } = require("./src/telegram/telegram");
 const {
   processMessage,
   HELP_MESSAGE,
@@ -42,7 +42,9 @@ describe("bot", () => {
       expect(response).toEqual(`${formatToHumanDate(today)}
 10:00: 0/4
 11:00: 1/4
-12:00: 2/4`);
+12:00: 2/4
+
+${OVERVIEW_LINK}`);
     });
   });
 
@@ -60,7 +62,9 @@ describe("bot", () => {
 ${formatToHumanDate(addDays(today, 1))}
 10:00: 0/4
 11:00: 1/4
-12:00: 2/4`);
+12:00: 2/4
+
+${OVERVIEW_LINK}`);
     });
   });
 
