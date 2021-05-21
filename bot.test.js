@@ -3,25 +3,30 @@ const addDays = require("date-fns/addDays");
 const client = require("./src/client/client");
 const { formatDate } = require("./src/day-filter/day-filter");
 const { formatToHumanDate } = require("./src/telegram/telegram");
-const { processMessage, HELP_MESSAGE } = require("./bot");
-
-const today = new Date();
-
-const getJson = (dates) =>
-  dates.reduce((acc, date) => {
-    return {
-      ...acc,
-      [formatDate(date)]: [
-        { starttimes: ["10:00", "11:00", "12:00"] },
-        { starttimes: ["10:00", "11:00", "12:00"] },
-        { starttimes: ["10:00", "11:00"] },
-        { starttimes: ["10:00"] },
-      ],
-    };
-  }, {});
+const {
+  processMessage,
+  HELP_MESSAGE,
+  ERR_NO_DATES,
+  ERR_FETCH_DATA,
+} = require("./bot");
 
 describe("bot", () => {
   let response;
+  const today = new Date();
+
+  const getJson = (dates) =>
+    dates.reduce((acc, date) => {
+      return {
+        ...acc,
+        [formatDate(date)]: [
+          { starttimes: ["10:00", "11:00", "12:00"] },
+          { starttimes: ["10:00", "11:00", "12:00"] },
+          { starttimes: ["10:00", "11:00"] },
+          { starttimes: ["10:00"] },
+        ],
+      };
+    }, {});
+
   beforeEach(async () => {
     jest.spyOn(client, "getTimeSlots").mockImplementation((dates) => {
       return getJson(dates);
@@ -78,61 +83,27 @@ ${formatToHumanDate(addDays(today, 1))}
       expect(response).toEqual(HELP_MESSAGE);
     });
   });
+
+  describe("when message contains no days", () => {
+    beforeEach(async () => {
+      response = await processMessage("foo");
+    });
+
+    it("returns error message", () => {
+      expect(response).toEqual(ERR_NO_DATES);
+    });
+  });
+
+  describe("when fetching data failed", () => {
+    beforeEach(async () => {
+      jest.spyOn(client, "getTimeSlots").mockImplementation((dates) => {
+        throw Error(err);
+      });
+      response = await processMessage("today");
+    });
+
+    it("returns appropriate error message", () => {
+      expect(response).toEqual(ERR_FETCH_DATA);
+    });
+  });
 });
-
-// describe("processTimeSlots()", () => {
-//   describe("when not including everything", () => {
-//     describe("when message only contains one day", () => {
-//       it("returns correct data", () => {
-//         expect(processTimeSlots("today", getJson(), false)).toStrictEqual({
-//           [formatDate(today)]: {
-//             "10:00:00": "[0/4]",
-//             "11:00:00": "[1/4]",
-//             "12:00:00": "[2/4]",
-//           },
-//         });
-//       });
-//     });
-
-//     describe("when message only contains multiple days", () => {
-//       it("returns correct data", () => {
-//         expect(
-//           processTimeSlots("today and tomorrow", getJson(), false)
-//         ).toStrictEqual({
-//           [formatDate(today)]: {
-//             "10:00:00": "[0/4]",
-//             "11:00:00": "[1/4]",
-//             "12:00:00": "[2/4]",
-//           },
-//           [formatDate(addDays(today, 1))]: {
-//             "10:00:00": "[0/4]",
-//             "11:00:00": "[1/4]",
-//             "12:00:00": "[3/4]",
-//           },
-//         });
-//       });
-//     });
-//   });
-
-//   describe("when including everything", () => {
-//     it("does not filter anything", () => {
-//       expect(processTimeSlots(null, getJson(), true)).toStrictEqual({
-//         [formatDate(today)]: {
-//           "10:00:00": "[0/4]",
-//           "11:00:00": "[1/4]",
-//           "12:00:00": "[2/4]",
-//         },
-//         [formatDate(addDays(today, 1))]: {
-//           "10:00:00": "[0/4]",
-//           "11:00:00": "[1/4]",
-//           "12:00:00": "[3/4]",
-//         },
-//         [formatDate(addDays(today, 2))]: {
-//           "14:00:00": "[0/4]",
-//           "17:00:00": "[3/4]",
-//           "20:00:00": "[2/4]",
-//         },
-//       });
-//     });
-//   });
-// });

@@ -9,11 +9,25 @@ Usage:
 _*all*_: All available information
 _*\\<day\\>*_: Filter information by days\\. Here,_*\\<day\\>*_ can be any weekday or _*today*_ as well as *_tomorrow_*\\. You can chain mulitple days with _*and*_\\.`;
 
+const ERR_NO_DATES = "Could not parse dates.";
+const ERR_FETCH_DATA = "Failed to fetch slots data, please try again later.";
+
 async function respondWithTimeSlots(message) {
   const dates = getDates(message);
-  const timeSlotsRaw = await getTimeSlots(dates);
-  const timeSlots = formatTimeSlots(timeSlotsRaw);
-  return formatMessage(timeSlots);
+  if (dates.length === 0) {
+    return ERR_NO_DATES;
+  }
+
+  try {
+    timeSlotsRaw = await getTimeSlots(dates);
+    const timeSlots = formatTimeSlots(timeSlotsRaw);
+
+    return formatMessage(timeSlots);
+  } catch (err) {
+    console.log("failed to fetch data", err);
+
+    return ERR_FETCH_DATA;
+  }
 }
 
 function processMessage(message) {
@@ -31,4 +45,6 @@ function processMessage(message) {
 module.exports = {
   processMessage,
   HELP_MESSAGE,
+  ERR_NO_DATES,
+  ERR_FETCH_DATA,
 };
