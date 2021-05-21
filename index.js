@@ -1,4 +1,8 @@
-const { sendMessage, sanitiseMessage } = require("./src/telegram/telegram");
+const {
+  sendMessage,
+  sanitiseMessage,
+  escapeMarkdown,
+} = require("./src/telegram/telegram");
 const { processMessage } = require("./bot");
 
 /**
@@ -17,7 +21,7 @@ async function handleRequest(req, res) {
   try {
     const data = await processMessage(sanitisedMessage);
     await sendMessage({
-      response: data,
+      response: escapeMarkdown(data),
       chatId: message.chat.id,
     });
     res.send({ status: "OK" });

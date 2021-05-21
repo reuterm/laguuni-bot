@@ -131,4 +131,24 @@ Thursday, June 4
       expect(telegram.sanitiseMessage("@myBot hello")).toEqual("hello");
     });
   });
+
+  describe("escapeMarkdown()", () => {
+    it("escapes dots", () => {
+      expect(telegram.escapeMarkdown("Hey.")).toEqual("Hey\\.");
+    });
+
+    it("escapes smaller signs", () => {
+      expect(telegram.escapeMarkdown("Hey <3")).toEqual("Hey \\<3");
+    });
+
+    it("escapes greater signs", () => {
+      expect(telegram.escapeMarkdown(">:)")).toEqual("\\>:)");
+    });
+
+    it("espaces multiple characters", () => {
+      expect(telegram.escapeMarkdown("<alert>('Hi.')</alert>")).toEqual(
+        "\\<alert\\>('Hi\\.')\\</alert\\>"
+      );
+    });
+  });
 });

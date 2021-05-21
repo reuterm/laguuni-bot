@@ -7,7 +7,7 @@ const HELP_MESSAGE = `Get booking information of Laguunis Pro Cable
 
 Usage:
 _*all*_: All available information
-_*\\<day\\>*_: Filter information by days\\. Here,_*\\<day\\>*_ can be any weekday or _*today*_ as well as *_tomorrow_*\\. You can chain mulitple days with _*and*_\\.`;
+_*<day>*_: Filter information by days. Here,_*<day>*_ can be any weekday or _*today*_ as well as *_tomorrow_*. You can chain mulitple days with _*and*_.`;
 
 const ERR_NO_DATES = "Could not parse dates.";
 const ERR_FETCH_DATA = "Failed to fetch slots data, please try again later.";
@@ -48,3 +48,5 @@ module.exports = {
   ERR_NO_DATES,
   ERR_FETCH_DATA,
 };
+
+processMessage("tomorrow").then((msg) => console.log("response", msg));

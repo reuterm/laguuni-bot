@@ -1,5 +1,6 @@
 const fetch = require("node-fetch");
 
+const ESCAPE_CHARS = ["<", ">", ".", "!"];
 const TELEGRAM_REPLY_URL = (token) =>
   `https://api.telegram.org/bot${token}/sendMessage`;
 const DATE_OPTIONS = { weekday: "long", month: "long", day: "numeric" };
@@ -63,10 +64,18 @@ function sanitiseMessage(message) {
     .trim();
 }
 
+function escapeMarkdown(message) {
+  return ESCAPE_CHARS.reduce(
+    (msg, char) => msg.replaceAll(char, `\\${char}`),
+    message
+  );
+}
+
 module.exports = {
   sendMessage,
   formatMessage,
   formatToHumanDate,
   formatDateSlots,
   sanitiseMessage,
+  escapeMarkdown,
 };
