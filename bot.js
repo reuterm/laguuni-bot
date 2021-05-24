@@ -6,7 +6,7 @@ const { getDates } = require("./src/day-filter/day-filter");
 const HELP_MESSAGE = `Get booking information of Laguunis Pro Cable
 
 Usage:
-_*all*_: All available information
+_*help*_: Show this message
 _*<day>*_: Filter information by days. Here,_*<day>*_ can be any weekday or _*today*_ as well as *_tomorrow_*. You can chain mulitple days with _*and*_.`;
 
 const ERR_NO_DATES = "Could not parse dates.";
