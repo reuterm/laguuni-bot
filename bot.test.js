@@ -4,6 +4,7 @@ const client = require("./src/client/client");
 const { formatDate } = require("./src/day-filter/day-filter");
 const { formatToHumanDate, OVERVIEW_LINK } = require("./src/telegram/telegram");
 const {
+  stripCableFilter,
   processMessage,
   HELP_MESSAGE,
   ERR_NO_DATES,
@@ -27,34 +28,58 @@ describe("bot", () => {
       };
     }, {});
 
-  beforeEach(async () => {
-    jest.spyOn(client, "getTimeSlots").mockImplementation((dates) => {
-      return getJson(dates);
+  describe("stripCableFilter()", () => {
+    it("correctly detects and removes pro cable", () => {
+      expect(stripCableFilter("pro today")).toMatchObject({
+        cable: "pro",
+        strippedMessage: "today",
+      });
+    });
+
+    it("correctly detects and removes easy cable", () => {
+      expect(stripCableFilter("tomorrow easy")).toMatchObject({
+        cable: "easy",
+        strippedMessage: "tomorrow",
+      });
+    });
+
+    it("does nothing if no filters are present", () => {
+      expect(stripCableFilter("tomorrow and today")).toMatchObject({
+        cable: null,
+        strippedMessage: "tomorrow and today",
+      });
     });
   });
 
-  describe("when message only contains single day", () => {
+  describe("processMessage()", () => {
     beforeEach(async () => {
-      response = await processMessage("today");
+      jest.spyOn(client, "getTimeSlots").mockImplementation((dates) => {
+        return getJson(dates);
+      });
     });
 
-    it("returns correct data", () => {
-      expect(response).toEqual(`${formatToHumanDate(today)}
+    describe("when message only contains single day", () => {
+      beforeEach(async () => {
+        response = await processMessage("today");
+      });
+
+      it("returns correct data", () => {
+        expect(response).toEqual(`${formatToHumanDate(today)}
 10:00: 4/4
 11:00: 3/4
 12:00: 2/4
 
 ${OVERVIEW_LINK}`);
-    });
-  });
-
-  describe("when message contains multiple days", () => {
-    beforeEach(async () => {
-      response = await processMessage("today and tomorrow");
+      });
     });
 
-    it("returns correct data", () => {
-      expect(response).toEqual(`${formatToHumanDate(today)}
+    describe("when message contains multiple days", () => {
+      beforeEach(async () => {
+        response = await processMessage("today and tomorrow");
+      });
+
+      it("returns correct data", () => {
+        expect(response).toEqual(`${formatToHumanDate(today)}
 10:00: 4/4
 11:00: 3/4
 12:00: 2/4
@@ -65,49 +90,50 @@ ${formatToHumanDate(addDays(today, 1))}
 12:00: 2/4
 
 ${OVERVIEW_LINK}`);
-    });
-  });
-
-  describe("when message is empty", () => {
-    beforeEach(async () => {
-      response = await processMessage();
-    });
-
-    it("returns an empty message", () => {
-      expect(response).toEqual("");
-    });
-  });
-
-  describe("when asking for help", () => {
-    beforeEach(async () => {
-      response = await processMessage("help");
-    });
-
-    it("returns the help message", () => {
-      expect(response).toEqual(HELP_MESSAGE);
-    });
-  });
-
-  describe("when message contains no days", () => {
-    beforeEach(async () => {
-      response = await processMessage("foo");
-    });
-
-    it("returns error message", () => {
-      expect(response).toEqual(ERR_NO_DATES);
-    });
-  });
-
-  describe("when fetching data failed", () => {
-    beforeEach(async () => {
-      jest.spyOn(client, "getTimeSlots").mockImplementation((dates) => {
-        throw Error(err);
       });
-      response = await processMessage("today");
     });
 
-    it("returns appropriate error message", () => {
-      expect(response).toEqual(ERR_FETCH_DATA);
+    describe("when message is empty", () => {
+      beforeEach(async () => {
+        response = await processMessage();
+      });
+
+      it("returns an empty message", () => {
+        expect(response).toEqual("");
+      });
+    });
+
+    describe("when asking for help", () => {
+      beforeEach(async () => {
+        response = await processMessage("help");
+      });
+
+      it("returns the help message", () => {
+        expect(response).toEqual(HELP_MESSAGE);
+      });
+    });
+
+    describe("when message contains no days", () => {
+      beforeEach(async () => {
+        response = await processMessage("foo");
+      });
+
+      it("returns error message", () => {
+        expect(response).toEqual(ERR_NO_DATES);
+      });
+    });
+
+    describe("when fetching data failed", () => {
+      beforeEach(async () => {
+        jest.spyOn(client, "getTimeSlots").mockImplementation((dates) => {
+          throw Error(err);
+        });
+        response = await processMessage("today");
+      });
+
+      it("returns appropriate error message", () => {
+        expect(response).toEqual(ERR_FETCH_DATA);
+      });
     });
   });
 });

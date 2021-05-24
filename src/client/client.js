@@ -1,25 +1,36 @@
 const fetch = require("node-fetch");
 const { formatDate } = require("../day-filter/day-filter");
 
-function buildUrl(date, count) {
-  return `https://johku.com/laguuni/fi_FI/products/6/availabletimes/${date}.json?count=${count}`;
+const CABLES = {
+  PRO: "pro",
+  EASY: "easy",
+};
+
+const CABLE_MAPPING = {
+  [CABLES.PRO]: "6",
+  [CABLES.EASY]: "7",
+};
+
+function buildUrl(date, count, cableStr) {
+  const cable = CABLE_MAPPING[cableStr] || CABLE_MAPPING[CABLES.PRO];
+  return `https://johku.com/laguuni/fi_FI/products/${cable}/availabletimes/${date}.json?count=${count}`;
 }
 
-function fetchDateCountCombination(date, count) {
-  return fetch(buildUrl(date, count));
+function fetchDateCountCombination(date, count, cable) {
+  return fetch(buildUrl(date, count, cable));
 }
 
-function fetchDateSlots(date) {
+function fetchDateSlots(date, cable) {
   return [1, 2, 3, 4].map(async (count) => {
-    const data = await fetchDateCountCombination(date, count);
+    const data = await fetchDateCountCombination(date, count, cable);
     return data.json();
   });
 }
 
-async function getTimeSlots(dates) {
+async function getTimeSlots(dates, cable=CABLES.PRO) {
   const dateStrings = dates.map((date) => formatDate(date));
   const timeSlots = await Promise.all(
-    dateStrings.map((date) => Promise.all(fetchDateSlots(date)))
+    dateStrings.map((date) => Promise.all(fetchDateSlots(date, cable)))
   );
 
   return timeSlots.reduce((acc, data, i) => {
@@ -33,4 +44,6 @@ module.exports = {
   fetchDateSlots,
   fetchDateCountCombination,
   buildUrl,
+  CABLES,
+  CABLE_MAPPING,
 };

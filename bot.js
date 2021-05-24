@@ -1,4 +1,4 @@
-const { getTimeSlots } = require("./src/client/client");
+const { getTimeSlots, CABLES } = require("./src/client/client");
 const { formatTimeSlots } = require("./src/json/json");
 const { formatMessage } = require("./src/telegram/telegram");
 const { getDates } = require("./src/day-filter/day-filter");
@@ -12,14 +12,27 @@ _*<day>*_: Filter information by days. Here,_*<day>*_ can be any weekday or _*to
 const ERR_NO_DATES = "Could not parse dates.";
 const ERR_FETCH_DATA = "Failed to fetch slots data, please try again later.";
 
+const CABLES_REGEX = new RegExp(Object.values(CABLES).join("|"), "i");
+
+function stripCableFilter(message) {
+  const match = String(message).match(CABLES_REGEX);
+  const strippedMessage = String(message).replace(CABLES_REGEX, "").trim();
+
+  return {
+    cable: match && match.length > 0 ? match[0] : null,
+    strippedMessage,
+  };
+}
+
 async function respondWithTimeSlots(message) {
-  const dates = getDates(message);
+  const { cable, strippedMessage } = stripCableFilter(message);
+  const dates = getDates(strippedMessage);
   if (dates.length === 0) {
     return ERR_NO_DATES;
   }
 
   try {
-    timeSlotsRaw = await getTimeSlots(dates);
+    timeSlotsRaw = await getTimeSlots(dates, cable);
     const timeSlots = formatTimeSlots(timeSlotsRaw);
 
     return formatMessage(timeSlots);
@@ -43,6 +56,7 @@ function processMessage(message) {
 }
 
 module.exports = {
+  stripCableFilter,
   processMessage,
   HELP_MESSAGE,
   ERR_NO_DATES,
