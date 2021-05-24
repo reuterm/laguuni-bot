@@ -15,8 +15,8 @@ const ERR_FETCH_DATA = "Failed to fetch slots data, please try again later.";
 const CABLES_REGEX = new RegExp(Object.values(CABLES).join("|"), "i");
 
 function stripCableFilter(message) {
-  const match = String(message).match(CABLES_REGEX);
-  const strippedMessage = String(message).replace(CABLES_REGEX, "").trim();
+  const match = message.match(CABLES_REGEX);
+  const strippedMessage = message.replace(CABLES_REGEX, "").trim();
 
   return {
     cable: match && match.length > 0 ? match[0] : null,
@@ -48,7 +48,7 @@ function processMessage(message) {
     return "";
   }
 
-  if (String(message).toUpperCase() === "HELP") {
+  if (message.toUpperCase() === "HELP") {
     return HELP_MESSAGE;
   }
 

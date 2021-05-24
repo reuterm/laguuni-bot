@@ -38,7 +38,7 @@ function convertToDate(filter) {
 }
 
 function getDates(str) {
-  const filters = String(str)
+  const filters = str
     .split("and")
     .map((item) => item.trim());
   const converted = filters.map(convertToDate);
