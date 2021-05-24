@@ -24,7 +24,7 @@ function mergeDays(combinations) {
         const countAcc = combinations[date][count].reduce(
           (timesAcc, time) => ({
             ...timesAcc,
-            [time]: `${CAPACITY - count}/${CAPACITY}`,
+            [time]: `${count}/${CAPACITY}`,
           }),
           {}
         );

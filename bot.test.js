@@ -40,8 +40,8 @@ describe("bot", () => {
 
     it("returns correct data", () => {
       expect(response).toEqual(`${formatToHumanDate(today)}
-10:00: 0/4
-11:00: 1/4
+10:00: 4/4
+11:00: 3/4
 12:00: 2/4
 
 ${OVERVIEW_LINK}`);
@@ -55,13 +55,13 @@ ${OVERVIEW_LINK}`);
 
     it("returns correct data", () => {
       expect(response).toEqual(`${formatToHumanDate(today)}
-10:00: 0/4
-11:00: 1/4
+10:00: 4/4
+11:00: 3/4
 12:00: 2/4
 
 ${formatToHumanDate(addDays(today, 1))}
-10:00: 0/4
-11:00: 1/4
+10:00: 4/4
+11:00: 3/4
 12:00: 2/4
 
 ${OVERVIEW_LINK}`);
