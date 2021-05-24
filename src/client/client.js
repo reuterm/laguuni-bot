@@ -27,7 +27,7 @@ function fetchDateSlots(date, cable) {
   });
 }
 
-async function getTimeSlots(dates, cable=CABLES.PRO) {
+async function getTimeSlots(dates, cable = CABLES.PRO) {
   const dateStrings = dates.map((date) => formatDate(date));
   const timeSlots = await Promise.all(
     dateStrings.map((date) => Promise.all(fetchDateSlots(date, cable)))
@@ -45,5 +45,4 @@ module.exports = {
   fetchDateCountCombination,
   buildUrl,
   CABLES,
-  CABLE_MAPPING,
 };
