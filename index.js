@@ -15,8 +15,12 @@ async function handleRequest(req, res) {
   const message = req.body.message;
   console.log("Received message:", JSON.stringify(message, null, 2));
 
+  if (!message.text) {
+    res.sendStatus(400);
+    return;
+  }
+
   const sanitisedMessage = sanitiseMessage(message.text);
-  console.log("Sanitised message:", sanitisedMessage);
 
   try {
     const data = await processMessage(sanitisedMessage);
