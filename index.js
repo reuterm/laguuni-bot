@@ -14,7 +14,7 @@ const { processMessage } = require("./bot");
 async function handleRequest(req, res) {
   const message = req.body.message;
   if (!(message && message.text)) {
-    console.log("Received invalid request:", JSON.stringify(req, null, 2));
+    console.log("Received invalid request:", JSON.stringify(req.body, null, 2));
     res.sendStatus(400);
     return;
   }
