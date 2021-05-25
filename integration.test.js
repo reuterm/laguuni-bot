@@ -42,7 +42,7 @@ describe("handleRequest()", () => {
   describe("when received message does not require response", () => {
     beforeEach(async () => {
       fetch.mockReturnValue(Promise.resolve(new Response()));
-      await handleRequest(buildReq(""), res);
+      await handleRequest(buildReq(" "), res);
     });
     it("does not send response to the chat", () => {
       expect(fetch).not.toHaveBeenCalled();
@@ -50,6 +50,20 @@ describe("handleRequest()", () => {
 
     it("responds to request", () => {
       expect(res.send).toHaveBeenCalledWith({ status: "OK" });
+    });
+  });
+
+  describe("when received invalid request", () => {
+    beforeEach(async () => {
+      fetch.mockReturnValue(Promise.resolve(new Response()));
+      await handleRequest(buildReq(undefined), res);
+    });
+    it("does not send response to the chat", () => {
+      expect(fetch).not.toHaveBeenCalled();
+    });
+
+    it("responds to request", () => {
+      expect(res.sendStatus).toHaveBeenCalledWith(400);
     });
   });
 
