@@ -15,7 +15,7 @@ async function handleRequest(req, res) {
   const message = req.body.message;
   console.log("Received message:", JSON.stringify(message, null, 2));
 
-  if (!message.text) {
+  if (!(message && message.text)) {
     res.sendStatus(400);
     return;
   }

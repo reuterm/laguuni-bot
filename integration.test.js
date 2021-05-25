@@ -53,10 +53,24 @@ describe("handleRequest()", () => {
     });
   });
 
-  describe("when received invalid request", () => {
+  describe("when received invalid message", () => {
     beforeEach(async () => {
       fetch.mockReturnValue(Promise.resolve(new Response()));
       await handleRequest(buildReq(undefined), res);
+    });
+    it("does not send response to the chat", () => {
+      expect(fetch).not.toHaveBeenCalled();
+    });
+
+    it("responds to request", () => {
+      expect(res.sendStatus).toHaveBeenCalledWith(400);
+    });
+  });
+
+  describe("when received invalid request", () => {
+    beforeEach(async () => {
+      fetch.mockReturnValue(Promise.resolve(new Response()));
+      await handleRequest({ body: {} }, res);
     });
     it("does not send response to the chat", () => {
       expect(fetch).not.toHaveBeenCalled();
