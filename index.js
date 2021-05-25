@@ -13,13 +13,13 @@ const { processMessage } = require("./bot");
  */
 async function handleRequest(req, res) {
   const message = req.body.message;
-  console.log("Received message:", JSON.stringify(message, null, 2));
-
   if (!(message && message.text)) {
+    console.log("Received invalid request:", JSON.stringify(req, null, 2));
     res.sendStatus(400);
     return;
   }
 
+  console.log("Received message:", JSON.stringify(message, null, 2));
   const sanitisedMessage = sanitiseMessage(message.text);
 
   try {
