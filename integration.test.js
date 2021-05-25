@@ -63,7 +63,7 @@ describe("handleRequest()", () => {
     });
 
     it("responds to request", () => {
-      expect(res.sendStatus).toHaveBeenCalledWith(400);
+      expect(res.send).toHaveBeenCalledWith({ status: "OK" });
     });
   });
 
@@ -77,7 +77,7 @@ describe("handleRequest()", () => {
     });
 
     it("responds to request", () => {
-      expect(res.sendStatus).toHaveBeenCalledWith(400);
+      expect(res.send).toHaveBeenCalledWith({ status: "OK" });
     });
   });
 

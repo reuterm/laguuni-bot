@@ -15,7 +15,7 @@ async function handleRequest(req, res) {
   const message = req.body.message;
   if (!(message && message.text)) {
     console.log("Received invalid request:", JSON.stringify(req.body, null, 2));
-    res.sendStatus(400);
+    res.send({ status: "OK" }); // Stop Telegram backend from sending more requests
     return;
   }
 
