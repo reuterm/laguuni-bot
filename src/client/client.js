@@ -4,11 +4,13 @@ const { formatDate } = require("../day-filter/day-filter");
 const CABLES = {
   PRO: "pro",
   EASY: "easy",
+  HIETSU: "hietsu",
 };
 
 const CABLE_MAPPING = {
   [CABLES.PRO]: "6",
   [CABLES.EASY]: "7",
+  [CABLES.HIETSU]: "157",
 };
 
 function buildUrl(date, count, cableStr) {
