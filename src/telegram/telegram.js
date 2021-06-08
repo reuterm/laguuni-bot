@@ -14,7 +14,7 @@ const BOOKING_PAGE = {
   [CABLES.PRO]:
     "https://shop.laguuniin.fi/fi_FI/wakeboarding/wakeboarding-pro-kaapeli",
   [CABLES.HIETSU]:
-    "https://shop.laguuniin.fi/fi_FI/hietsu-helsinki/wakeboarding-hietsu",
+    "https://shop.laguuniin.fi/fi_FI/wakeboarding-hietsu/wakeboarding-hietsun-kaapeli",
 };
 
 async function sendMessage(data) {

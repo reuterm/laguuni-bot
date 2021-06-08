@@ -18,7 +18,7 @@ Thursday, June 4
   describe("getBookingPage", () => {
     it("returns formatted link to existing cable", () => {
       expect(telegram.getBookingPage(CABLES.HIETSU)).toEqual(
-        "[Book](https://shop.laguuniin.fi/fi_FI/hietsu-helsinki/wakeboarding-hietsu)"
+        "[Book](https://shop.laguuniin.fi/fi_FI/wakeboarding-hietsu/wakeboarding-hietsun-kaapeli)"
       );
     });
 
