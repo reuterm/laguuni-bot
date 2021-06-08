@@ -29,6 +29,7 @@ async function sendMessage(data) {
     chat_id: data.chatId,
     text: data.response,
     parse_mode: "MarkdownV2",
+    disable_web_page_preview: true,
   };
 
   console.log("Sending payload:", JSON.stringify(payload, null, 2));

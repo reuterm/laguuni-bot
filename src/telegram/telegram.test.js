@@ -93,6 +93,7 @@ Thursday, June 4
             chat_id: data.chatId,
             text: data.response,
             parse_mode: "MarkdownV2",
+            disable_web_page_preview: true,
           }),
           headers: { "Content-Type": "application/json" },
         });
