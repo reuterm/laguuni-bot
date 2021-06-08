@@ -19,7 +19,7 @@ function stripCableFilter(message) {
   const strippedMessage = message.replace(CABLES_REGEX, "").trim();
 
   return {
-    cable: match && match.length > 0 ? match[0] : null,
+    cable: match && match.length > 0 ? match[0] : CABLES.PRO,
     strippedMessage,
   };
 }
@@ -35,7 +35,7 @@ async function respondWithTimeSlots(message) {
     timeSlotsRaw = await getTimeSlots(dates, cable);
     const timeSlots = formatTimeSlots(timeSlotsRaw);
 
-    return formatMessage(timeSlots);
+    return formatMessage(timeSlots, cable);
   } catch (err) {
     console.log("failed to fetch data", err);
 

@@ -1,6 +1,7 @@
 jest.mock("node-fetch");
 const fetch = require("node-fetch");
 const { Response } = jest.requireActual("node-fetch");
+const { CABLES } = require("../client/client");
 const telegram = require("./telegram");
 
 describe("telegram", () => {
@@ -13,6 +14,18 @@ Thursday, June 4
 4: 4
 5: 5
 6: 6`;
+
+  describe("getBookingPage", () => {
+    it("returns formatted link to existing cable", () => {
+      expect(telegram.getBookingPage(CABLES.HIETSU)).toEqual(
+        "[Book](https://shop.laguuniin.fi/fi_FI/hietsu-helsinki/wakeboarding-hietsu)"
+      );
+    });
+
+    it("returns empty string for non-existent cable", () => {
+      expect(telegram.getBookingPage("foo")).toEqual("");
+    });
+  });
 
   describe("formateDateSlots()", () => {
     let data;

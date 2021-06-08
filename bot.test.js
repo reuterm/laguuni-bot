@@ -2,7 +2,7 @@ jest.mock("./src/client/client");
 const addDays = require("date-fns/addDays");
 const client = require("./src/client/client");
 const { formatDate } = require("./src/day-filter/day-filter");
-const { formatToHumanDate, OVERVIEW_LINK } = require("./src/telegram/telegram");
+const { formatToHumanDate, OVERVIEW_LINK, BOOKING_PAGE } = require("./src/telegram/telegram");
 const {
   stripCableFilter,
   processMessage,
@@ -43,9 +43,9 @@ describe("bot", () => {
       });
     });
 
-    it("does nothing if no filters are present", () => {
+    it("use pro cable as default if no cable is detected", () => {
       expect(stripCableFilter("tomorrow and today")).toMatchObject({
-        cable: null,
+        cable: client.CABLES.PRO,
         strippedMessage: "tomorrow and today",
       });
     });
@@ -69,7 +69,9 @@ describe("bot", () => {
 11:00: 3/4
 12:00: 2/4
 
-${OVERVIEW_LINK}`);
+${OVERVIEW_LINK}
+
+[Book](${BOOKING_PAGE[client.CABLES.PRO]})`);
       });
     });
 
@@ -89,7 +91,9 @@ ${formatToHumanDate(addDays(today, 1))}
 11:00: 3/4
 12:00: 2/4
 
-${OVERVIEW_LINK}`);
+${OVERVIEW_LINK}
+
+[Book](${BOOKING_PAGE[client.CABLES.PRO]})`);
       });
     });
 

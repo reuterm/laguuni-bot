@@ -1,4 +1,5 @@
 const fetch = require("node-fetch");
+const { CABLES } = require("../client/client");
 
 const ESCAPE_CHARS = /[<>!\.]/g;
 const LAGUUNI_FIXER_URL =
@@ -7,6 +8,14 @@ const OVERVIEW_LINK = `[Overview](${LAGUUNI_FIXER_URL})`;
 const TELEGRAM_REPLY_URL = (token) =>
   `https://api.telegram.org/bot${token}/sendMessage`;
 const DATE_OPTIONS = { weekday: "long", month: "long", day: "numeric" };
+const BOOKING_PAGE = {
+  [CABLES.EASY]:
+    "https://shop.laguuniin.fi/fi_FI/wakeboarding/wakeboarding-easy-kaapeli",
+  [CABLES.PRO]:
+    "https://shop.laguuniin.fi/fi_FI/wakeboarding/wakeboarding-pro-kaapeli",
+  [CABLES.HIETSU]:
+    "https://shop.laguuniin.fi/fi_FI/hietsu-helsinki/wakeboarding-hietsu",
+};
 
 async function sendMessage(data) {
   if (!data.response || data.response.length === 0) {
@@ -42,6 +51,15 @@ async function sendMessage(data) {
   }
 }
 
+function getBookingPage(cable) {
+  const url = BOOKING_PAGE[cable];
+  if (!url) {
+    return "";
+  }
+
+  return `[Book](${url})`;
+}
+
 function formatToHumanDate(date) {
   return new Date(date).toLocaleString("en-US", DATE_OPTIONS);
 }
@@ -59,10 +77,11 @@ function formatDays(timeSlotJson) {
   return formattedDays.join("\n\n");
 }
 
-function formatMessage(timeSlotJson) {
+function formatMessage(timeSlotJson, cable) {
   const formattedDays = formatDays(timeSlotJson);
+  const bookingPage = getBookingPage(cable)
 
-  return `${formattedDays}\n\n${OVERVIEW_LINK}`;
+  return `${formattedDays}\n\n${OVERVIEW_LINK}\n\n${bookingPage}`;
 }
 
 function sanitiseMessage(message) {
@@ -79,6 +98,7 @@ function escapeMarkdown(message) {
 
 module.exports = {
   sendMessage,
+  getBookingPage,
   formatMessage,
   formatDays,
   formatToHumanDate,
@@ -86,4 +106,5 @@ module.exports = {
   sanitiseMessage,
   escapeMarkdown,
   OVERVIEW_LINK,
+  BOOKING_PAGE,
 };
