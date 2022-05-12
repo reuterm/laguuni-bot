@@ -19,6 +19,11 @@ async function handleRequest(req, res) {
     return;
   }
 
+  if (message.reply_to_message) {
+    res.send({ status: "OK" }); // Don't respond to replies
+    return;
+  }
+
   console.log("Received message:", JSON.stringify(message, null, 2));
   const sanitisedMessage = sanitiseMessage(message.text);
 
