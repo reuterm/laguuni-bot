@@ -2,6 +2,7 @@ const { getTimeSlots, CABLES } = require("./src/client/client");
 const { formatTimeSlots } = require("./src/json/json");
 const { formatMessage } = require("./src/telegram/telegram");
 const { getDates } = require("./src/day-filter/day-filter");
+const { getLogger } = require("./src/logging/client");
 
 const HELP_MESSAGE = `Get booking information of Laguunis Pro Cable
 
@@ -37,7 +38,7 @@ async function respondWithTimeSlots(message) {
 
     return formatMessage(timeSlots, cable);
   } catch (err) {
-    console.log("failed to fetch data", err);
+    getLogger.error({ err }, "failed to fetch data");
 
     return ERR_FETCH_DATA;
   }

@@ -1,5 +1,6 @@
 const fetch = require("node-fetch");
 const { CABLES } = require("../client/client");
+const { getLogger } = require("./src/logging/client");
 
 const ESCAPE_CHARS = /[<>!\.]/g;
 const LAGUUNI_FIXER_URL =
@@ -18,8 +19,9 @@ const BOOKING_PAGE = {
 };
 
 async function sendMessage(data) {
+  const log = getLogger();
   if (!data.response || data.response.length === 0) {
-    console.log("No response, skipping");
+    log.info("No response, skipping");
     return;
   }
 
@@ -32,7 +34,7 @@ async function sendMessage(data) {
     disable_web_page_preview: true,
   };
 
-  console.log("Sending payload:", JSON.stringify(payload, null, 2));
+  log.debug({ payload }, "Sending payload");
 
   try {
     const res = await fetch(url, {
@@ -42,10 +44,7 @@ async function sendMessage(data) {
     });
     if (!res.ok) {
       const jsonResponse = await res.json();
-      console.log(
-        "Failed to send payload:",
-        JSON.stringify(jsonResponse, null, 2)
-      );
+      log.error({ resp: jsonResponse }, "Failed to send payload");
     }
   } catch (err) {
     throw err;
@@ -80,7 +79,7 @@ function formatDays(timeSlotJson) {
 
 function formatMessage(timeSlotJson, cable) {
   const formattedDays = formatDays(timeSlotJson);
-  const bookingPage = getBookingPage(cable)
+  const bookingPage = getBookingPage(cable);
 
   return `${formattedDays}\n\n${OVERVIEW_LINK}\n\n${bookingPage}`;
 }
