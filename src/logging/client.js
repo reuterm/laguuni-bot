@@ -3,21 +3,22 @@ const { LoggingBunyan } = require("@google-cloud/logging-bunyan");
 
 let logger;
 
-function getStream() {
+function getStreams() {
+  let streams = { stream: process.stdout, level: "debug" };
   // default to console stream
   if (process.env.ENV == "PRD") {
     const loggingBunyan = new LoggingBunyan();
-    return loggingBunyan.stream("debug");
+    streams = [...streams, loggingBunyan.stream("debug")];
   }
 
-  return { stream: process.stdout, level: "debug" };
+  return streams;
 }
 
 function getLogger() {
   if (!logger) {
     logger = bunyan.createLogger({
       name: "laguuni-bot",
-      streams: [getStream()],
+      streams: getStreams(),
     });
   }
 
