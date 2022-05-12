@@ -63,4 +63,4 @@ module.exports = {
   ERR_FETCH_DATA,
 };
 
-processMessage("tomorrow").then((msg) => console.log("response", msg));
+// processMessage("tomorrow").then((msg) => console.log("response", msg));

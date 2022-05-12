@@ -4,6 +4,7 @@ const {
   escapeMarkdown,
 } = require("./src/telegram/telegram");
 const { processMessage } = require("./bot");
+const { getLogger } = require("./src/logging/client");
 
 /**
  * Responds to any HTTP request.
@@ -12,9 +13,10 @@ const { processMessage } = require("./bot");
  * @param {!express:Response} res HTTP response context.
  */
 async function handleRequest(req, res) {
+  const log = getLogger();
   const message = req.body.message;
   if (!(message && message.text)) {
-    console.log("Received invalid request:", JSON.stringify(req.body, null, 2));
+    log.error({ req: req.body }, "Received invalid request");
     res.send({ status: "OK" }); // Stop Telegram backend from sending more requests
     return;
   }
@@ -24,7 +26,7 @@ async function handleRequest(req, res) {
     return;
   }
 
-  console.log("Received message:", JSON.stringify(message, null, 2));
+  log.debug({ msg: message }, "Received message");
   const sanitisedMessage = sanitiseMessage(message.text);
 
   try {
@@ -35,7 +37,7 @@ async function handleRequest(req, res) {
     });
     res.send({ status: "OK" });
   } catch (err) {
-    console.error(err);
+    log.error(err);
     res.sendStatus(500);
   }
 }

@@ -13,7 +13,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v2-beta
         with:
-          node-version: "12"
+          node-version: '12'
       - name: Install dependencies
         run: npm install
       - name: Run tests
@@ -35,7 +35,7 @@ jobs:
       - name: Set up gcloud
         uses: google-github-actions/setup-gcloud@v0
       - name: Deploy
-        run: gcloud functions deploy laguuni-slots-bot --region europe-west3 --entry-point handleRequest --runtime nodejs12 --trigger-http --allow-unauthenticated --set-env-vars "TELEGRAM_TOKEN=$TELEGRAM_TOKEN,TELEGRAM_BOT_NAME=$TELEGRAM_BOT_NAME"
+        run: gcloud functions deploy laguuni-slots-bot --region europe-west3 --entry-point handleRequest --runtime nodejs12 --trigger-http --allow-unauthenticated --set-env-vars "TELEGRAM_TOKEN=$TELEGRAM_TOKEN,TELEGRAM_BOT_NAME=$TELEGRAM_BOT_NAME,ENV=PRD"
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_BOT_NAME: ${{ secrets.TELEGRAM_BOT_NAME }}
