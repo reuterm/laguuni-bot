@@ -1,6 +1,6 @@
 const fetch = require("node-fetch");
 const { CABLES } = require("../client/client");
-const { getLogger } = require("./src/logging/client");
+const logger = require("../logging/client");
 
 const ESCAPE_CHARS = /[<>!\.]/g;
 const LAGUUNI_FIXER_URL =
@@ -19,9 +19,8 @@ const BOOKING_PAGE = {
 };
 
 async function sendMessage(data) {
-  const log = getLogger();
   if (!data.response || data.response.length === 0) {
-    log.info("No response, skipping");
+    logger.info("No response, skipping");
     return;
   }
 
@@ -34,7 +33,7 @@ async function sendMessage(data) {
     disable_web_page_preview: true,
   };
 
-  log.debug({ payload }, "Sending payload");
+  logger.debug("Sending payload", { payload });
 
   try {
     const res = await fetch(url, {
@@ -44,7 +43,7 @@ async function sendMessage(data) {
     });
     if (!res.ok) {
       const jsonResponse = await res.json();
-      log.error({ resp: jsonResponse }, "Failed to send payload");
+      logger.error("Failed to send payload", { resp: jsonResponse });
     }
   } catch (err) {
     throw err;

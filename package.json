@@ -9,10 +9,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@google-cloud/logging-bunyan": "^3.3.1",
-    "bunyan": "^1.8.15",
     "date-fns": "^2.14.0",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "jest": "^26.0.1"
