@@ -17,6 +17,7 @@ const BOOKING_PAGE = {
   [CABLES.HIETSU]:
     "https://shop.laguuniin.fi/fi_FI/wakeboarding-hietsu/wakeboarding-hietsun-kaapeli",
 };
+const SLOTS_HEADER = "| Slot Start | Available Spots |\n| --- | --- |";
 
 async function sendMessage(data) {
   if (!data.response || data.response.length === 0) {
@@ -64,14 +65,18 @@ function formatToHumanDate(date) {
 }
 
 function formatDateSlots(dateSlots) {
-  return Object.keys(dateSlots).map((time) => `${time}: ${dateSlots[time]}`);
+  return Object.keys(dateSlots).map(
+    (time) => `| ${time} | ${dateSlots[time]} |`
+  );
 }
 
 function formatDays(timeSlotJson) {
   const formattedDays = Object.keys(timeSlotJson).map((date) => {
     const formattedDate = formatToHumanDate(date);
     const formattedDateSlots = formatDateSlots(timeSlotJson[date]);
-    return `${formattedDate}\n${formattedDateSlots.join("\n")}`;
+    return `${formattedDate}\n${SLOTS_HEADER}\n${formattedDateSlots.join(
+      "\n"
+    )}`;
   });
   return formattedDays.join("\n\n");
 }
@@ -106,4 +111,5 @@ module.exports = {
   escapeMarkdown,
   OVERVIEW_LINK,
   BOOKING_PAGE,
+  SLOTS_HEADER,
 };
