@@ -161,6 +161,10 @@ ${telegram.SLOTS_HEADER}
       expect(telegram.escapeMarkdown(">:)")).toEqual("\\>:)");
     });
 
+    it("escapes pipes", () => {
+      expect(telegram.escapeMarkdown("| foo |")).toEqual("\\| foo \\|");
+    });
+
     it("espaces multiple characters", () => {
       expect(telegram.escapeMarkdown("<alert>('Hi.')</alert>")).toEqual(
         "\\<alert\\>('Hi\\.')\\</alert\\>"

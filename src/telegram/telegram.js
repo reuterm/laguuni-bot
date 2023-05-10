@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 const { CABLES } = require("../client/client");
 const logger = require("../logging/client");
 
-const ESCAPE_CHARS = /[<>!\.]/g;
+const ESCAPE_CHARS = /[<>!\.\|]/g;
 const LAGUUNI_FIXER_URL =
   "http://laguuni-fixer-public.s3-website-eu-west-1.amazonaws.com";
 const OVERVIEW_LINK = `[Overview](${LAGUUNI_FIXER_URL})`;
