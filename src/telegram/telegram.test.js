@@ -165,6 +165,10 @@ ${telegram.SLOTS_HEADER}
       expect(telegram.escapeMarkdown("| foo |")).toEqual("\\| foo \\|");
     });
 
+    it("espaces dashes", () => {
+      expect(telegram.escapeMarkdown("- foo -")).toEqual("\\- foo \\-");
+    });
+
     it("espaces multiple characters", () => {
       expect(telegram.escapeMarkdown("<alert>('Hi.')</alert>")).toEqual(
         "\\<alert\\>('Hi\\.')\\</alert\\>"
