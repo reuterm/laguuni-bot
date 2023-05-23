@@ -2,7 +2,7 @@ const fetch = require("node-fetch");
 const { CABLES } = require("../client/client");
 const logger = require("../logging/client");
 
-const ESCAPE_CHARS = /[<>!\.\|-]/g;
+const ESCAPE_CHARS = /[<>!\.\|+-]/g;
 const LAGUUNI_FIXER_URL =
   "http://laguuni-fixer-public.s3-website-eu-west-1.amazonaws.com";
 const OVERVIEW_LINK = `[Overview](${LAGUUNI_FIXER_URL})`;
@@ -17,7 +17,8 @@ const BOOKING_PAGE = {
   [CABLES.HIETSU]:
     "https://shop.laguuniin.fi/fi_FI/wakeboarding-hietsu/wakeboarding-hietsun-kaapeli",
 };
-const SLOTS_HEADER = "| Slot Start | Available Spots |\n| --- | --- |";
+const SLOTS_HEADER =
+  "| Slot Start | Available Spots |\n+ ---------- + --------------- +";
 
 async function sendMessage(data) {
   if (!data.response || data.response.length === 0) {
@@ -66,7 +67,7 @@ function formatToHumanDate(date) {
 
 function formatDateSlots(dateSlots) {
   return Object.keys(dateSlots).map(
-    (time) => `| ${time} | ${dateSlots[time]} |`
+    (time) => `|    ${time}   |       ${dateSlots[time]}       |`
   );
 }
 
