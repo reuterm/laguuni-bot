@@ -6,16 +6,16 @@ const telegram = require("./telegram");
 
 describe("telegram", () => {
   const FORMATTED = `Wednesday, June 3
-${telegram.SLOTS_HEADER}
+\`\`\`${telegram.SLOTS_HEADER}
 |    1   |       1       |
 |    2   |       2       |
-|    3   |       3       |
+|    3   |       3       |\`\`\`
 
 Thursday, June 4
-${telegram.SLOTS_HEADER}
+\`\`\`${telegram.SLOTS_HEADER}
 |    4   |       4       |
 |    5   |       5       |
-|    6   |       6       |`;
+|    6   |       6       |\`\`\``;
 
   describe("getBookingPage", () => {
     it("returns formatted link to existing cable", () => {

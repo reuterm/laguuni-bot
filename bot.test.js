@@ -65,10 +65,10 @@ describe("bot", () => {
 
       it("returns correct data", () => {
         expect(response).toEqual(`${formatToHumanDate(today)}
-${SLOTS_HEADER}
+\`\`\`${SLOTS_HEADER}
 |    10:00   |       4/4       |
 |    11:00   |       3/4       |
-|    12:00   |       2/4       |
+|    12:00   |       2/4       |\`\`\`
 
 ${OVERVIEW_LINK}
 
@@ -83,16 +83,16 @@ ${OVERVIEW_LINK}
 
       it("returns correct data", () => {
         expect(response).toEqual(`${formatToHumanDate(today)}
-${SLOTS_HEADER}
+\`\`\`${SLOTS_HEADER}
 |    10:00   |       4/4       |
 |    11:00   |       3/4       |
-|    12:00   |       2/4       |
+|    12:00   |       2/4       |\`\`\`
 
 ${formatToHumanDate(addDays(today, 1))}
-${SLOTS_HEADER}
+\`\`\`${SLOTS_HEADER}
 |    10:00   |       4/4       |
 |    11:00   |       3/4       |
-|    12:00   |       2/4       |
+|    12:00   |       2/4       |\`\`\`
 
 ${OVERVIEW_LINK}
 
