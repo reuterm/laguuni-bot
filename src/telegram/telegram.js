@@ -1,5 +1,6 @@
 const fetch = require("node-fetch");
 const { CABLES } = require("../client/client");
+const { Table } = require("../table/table");
 const logger = require("../logging/client");
 
 const ESCAPE_CHARS = /[<>!\.\|+`-]/g;
@@ -17,8 +18,6 @@ const BOOKING_PAGE = {
   [CABLES.HIETSU]:
     "https://shop.laguuniin.fi/fi_FI/wakeboarding-hietsu/wakeboarding-hietsun-kaapeli",
 };
-const SLOTS_HEADER =
-  "| Slot Start | Available Spots |\n+ ---------- + --------------- +";
 
 async function sendMessage(data) {
   if (!data.response || data.response.length === 0) {
@@ -71,13 +70,20 @@ function formatDateSlots(dateSlots) {
   );
 }
 
+function formatToTable(dateSlots) {
+  const table = new Table();
+  table.setColumns(["Start", "Available"]);
+  Object.keys(dateSlots).forEach((time) => {
+    table.addRow([time, dateSlots[time]]);
+  });
+  return table.toString();
+}
+
 function formatDays(timeSlotJson) {
   const formattedDays = Object.keys(timeSlotJson).map((date) => {
     const formattedDate = formatToHumanDate(date);
-    const formattedDateSlots = formatDateSlots(timeSlotJson[date]);
-    return `${formattedDate}\n\`\`\`${SLOTS_HEADER}\n${formattedDateSlots.join(
-      "\n"
-    )}\`\`\``;
+    const formattedSlots = formatToTable(timeSlotJson[date]);
+    return `${formattedDate}\n\`\`\`\n${formattedSlots}\`\`\``;
   });
   return formattedDays.join("\n\n");
 }
@@ -112,5 +118,4 @@ module.exports = {
   escapeMarkdown,
   OVERVIEW_LINK,
   BOOKING_PAGE,
-  SLOTS_HEADER,
 };

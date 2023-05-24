@@ -64,4 +64,4 @@ module.exports = {
   ERR_FETCH_DATA,
 };
 
-// processMessage("tomorrow").then((msg) => logger.info("response", { msg }));
+processMessage("tomorrow").then((msg) => logger.info("response", { msg }));
