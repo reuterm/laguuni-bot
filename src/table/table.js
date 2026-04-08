@@ -9,7 +9,9 @@ class Table {
     this.columnNames = names;
     this.rows = [];
     this.maxWidth = [];
-    names.forEach((name) => this.maxWidth.push(name.length));
+    names.forEach((name) => {
+      this.maxWidth.push(name.length);
+    });
   }
 
   addRow(row) {
@@ -25,8 +27,8 @@ class Table {
     let tableString = "";
 
     const seperatorLine = this.maxWidth.reduce(
-      (acc, cur) => acc + "-".repeat(cur + 2) + "+",
-      "+"
+      (acc, cur) => `${acc + "-".repeat(cur + 2)}+`,
+      "+",
     );
 
     if (this.columnNames.length === 0) {
@@ -38,15 +40,15 @@ class Table {
       header += this.columnNames[i];
       // Adjust for max width of the column and pad spaces
       if (this.columnNames[i].length < this.maxWidth[i]) {
-        let lengthDifference = this.maxWidth[i] - this.columnNames[i].length;
+        const lengthDifference = this.maxWidth[i] - this.columnNames[i].length;
         header += Array(lengthDifference + 1).join(" ");
       }
       header += " | ";
     }
     header = header.slice(0, -1);
-    tableString += seperatorLine + "\n";
-    tableString += header + "\n";
-    tableString += seperatorLine + "\n";
+    tableString += `${seperatorLine}\n`;
+    tableString += `${header}\n`;
+    tableString += `${seperatorLine}\n`;
 
     let body = "";
     for (let i = 0; i < this.rows.length; i++) {
@@ -55,17 +57,17 @@ class Table {
         rowString += this.rows[i][k];
         // Adjust max width of each cell and pad spaces as necessary
         if (this.rows[i][k].toString().length < this.maxWidth[k]) {
-          let lengthDifference =
+          const lengthDifference =
             this.maxWidth[k] - this.rows[i][k].toString().length;
           rowString += Array(lengthDifference + 1).join(" ");
         }
         rowString += " | ";
       }
       rowString = rowString.slice(0, -1);
-      body += rowString + "\n";
+      body += `${rowString}\n`;
     }
     tableString += body;
-    tableString += seperatorLine + "\n";
+    tableString += `${seperatorLine}\n`;
     return tableString;
   }
 }

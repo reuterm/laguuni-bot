@@ -33,7 +33,7 @@ async function respondWithTimeSlots(message) {
   }
 
   try {
-    timeSlotsRaw = await getTimeSlots(dates, cable);
+    const timeSlotsRaw = await getTimeSlots(dates, cable);
     const timeSlots = formatTimeSlots(timeSlotsRaw);
 
     return formatMessage(timeSlots, cable);
@@ -63,5 +63,3 @@ module.exports = {
   ERR_NO_DATES,
   ERR_FETCH_DATA,
 };
-
-

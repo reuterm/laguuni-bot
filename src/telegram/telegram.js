@@ -2,7 +2,7 @@ const { CABLES } = require("../client/client");
 const { Table } = require("../table/table");
 const logger = require("../logging/client");
 
-const ESCAPE_CHARS = /[<>!\.\|+-]/g;
+const ESCAPE_CHARS = /[<>!.|+-]/g;
 const LAGUUNI_FIXER_URL =
   "http://laguuni-fixer-public.s3-website-eu-west-1.amazonaws.com";
 const OVERVIEW_LINK = `[Overview](${LAGUUNI_FIXER_URL})`;
@@ -34,19 +34,14 @@ async function sendMessage(data) {
   };
 
   logger.debug("Sending payload", { payload });
-
-  try {
-    const res = await fetch(url, {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: { "Content-Type": "application/json" },
-    });
-    if (!res.ok) {
-      const jsonResponse = await res.json();
-      logger.error("Failed to send payload", { resp: jsonResponse });
-    }
-  } catch (err) {
-    throw err;
+  const res = await fetch(url, {
+    method: "POST",
+    body: JSON.stringify(payload),
+    headers: { "Content-Type": "application/json" },
+  });
+  if (!res.ok) {
+    const jsonResponse = await res.json();
+    logger.error("Failed to send payload", { resp: jsonResponse });
   }
 }
 
@@ -65,7 +60,7 @@ function formatToHumanDate(date) {
 
 function formatDateSlots(dateSlots) {
   return Object.keys(dateSlots).map(
-    (time) => `|    ${time}   |       ${dateSlots[time]}       |`
+    (time) => `|    ${time}   |       ${dateSlots[time]}       |`,
   );
 }
 

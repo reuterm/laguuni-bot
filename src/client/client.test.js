@@ -5,9 +5,11 @@ describe("client", () => {
   let fetchSpy;
 
   beforeEach(() => {
-    fetchSpy = jest.spyOn(global, "fetch").mockImplementation((url) =>
-      Promise.resolve(new Response(JSON.stringify({ url }), { status: 200 }))
-    );
+    fetchSpy = jest
+      .spyOn(global, "fetch")
+      .mockImplementation((url) =>
+        Promise.resolve(new Response(JSON.stringify({ url }), { status: 200 })),
+      );
   });
 
   afterEach(() => {
@@ -17,7 +19,7 @@ describe("client", () => {
   describe("buildUrl()", () => {
     it("used pro cable as default", () => {
       expect(client.buildUrl(date, 1)).toEqual(
-        client.buildUrl(date, 1, client.CABLES.PRO)
+        client.buildUrl(date, 1, client.CABLES.PRO),
       );
     });
   });
@@ -29,7 +31,7 @@ describe("client", () => {
 
     it("calls correct endpoint", () => {
       expect(fetchSpy).toHaveBeenCalledWith(
-        client.buildUrl(date, 1, client.CABLES.PRO)
+        client.buildUrl(date, 1, client.CABLES.PRO),
       );
     });
   });
@@ -41,16 +43,16 @@ describe("client", () => {
 
     it("fetches all combinations", () => {
       expect(fetchSpy).toHaveBeenCalledWith(
-        client.buildUrl(date, 1, client.CABLES.EASY)
+        client.buildUrl(date, 1, client.CABLES.EASY),
       );
       expect(fetchSpy).toHaveBeenCalledWith(
-        client.buildUrl(date, 2, client.CABLES.EASY)
+        client.buildUrl(date, 2, client.CABLES.EASY),
       );
       expect(fetchSpy).toHaveBeenCalledWith(
-        client.buildUrl(date, 3, client.CABLES.EASY)
+        client.buildUrl(date, 3, client.CABLES.EASY),
       );
       expect(fetchSpy).toHaveBeenCalledWith(
-        client.buildUrl(date, 4, client.CABLES.EASY)
+        client.buildUrl(date, 4, client.CABLES.EASY),
       );
     });
   });
@@ -62,7 +64,7 @@ describe("client", () => {
     beforeEach(async () => {
       slots = await client.getTimeSlots(
         [new Date(date1), new Date(date2)],
-        client.CABLES.EASY
+        client.CABLES.EASY,
       );
     });
 

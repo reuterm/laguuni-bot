@@ -14,7 +14,7 @@ const logger = require("./src/logging/client");
  */
 async function handleRequest(req, res) {
   const message = req.body.message;
-  if (!(message && message.text)) {
+  if (!message?.text) {
     logger.error("Received invalid request", { req: req.body });
     res.send({ status: "OK" }); // Stop Telegram backend from sending more requests
     return;

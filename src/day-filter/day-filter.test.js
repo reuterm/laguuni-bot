@@ -6,14 +6,14 @@ describe("day filter", () => {
     it("returns correct date for value less or equal 7", () => {
       const date = new Date(Date.UTC(2020, 5, 3));
       expect(dayFilter.getNextDateOfWeekday(date, 1)).toStrictEqual(
-        new Date(Date.UTC(2020, 5, 8))
+        new Date(Date.UTC(2020, 5, 8)),
       );
     });
 
     it("return correct date for value over 7", () => {
       const date = new Date(Date.UTC(2020, 5, 3));
       expect(dayFilter.getNextDateOfWeekday(date, 8)).toStrictEqual(
-        new Date(Date.UTC(2020, 5, 8))
+        new Date(Date.UTC(2020, 5, 8)),
       );
     });
   });
@@ -56,14 +56,14 @@ describe("day filter", () => {
     it("retruns correct date for today", () => {
       const today = new Date();
       expect(dayFilter.convertToDate("today").getDate()).toEqual(
-        today.getDate()
+        today.getDate(),
       );
     });
 
     it("retruns correct date for tomorrow", () => {
       const tomorrow = addDays(new Date(), 1);
       expect(dayFilter.convertToDate("tomorrow").getDate()).toEqual(
-        tomorrow.getDate()
+        tomorrow.getDate(),
       );
     });
 

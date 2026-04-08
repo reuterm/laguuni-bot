@@ -2,18 +2,13 @@ const CAPACITY = 4;
 
 function extractDateCountCombinations(timeSlotsRaw) {
   return Object.keys(timeSlotsRaw).reduce((globalAcc, date) => {
-    const dateAcc = timeSlotsRaw[date].reduce(
-      (slotsAcc, slots, i) => ({
-        ...slotsAcc,
-        [i + 1]: slots.starttimes,
-      }),
-      {}
-    );
+    const dateAcc = timeSlotsRaw[date].reduce((slotsAcc, slots, i) => {
+      slotsAcc[i + 1] = slots.starttimes;
+      return slotsAcc;
+    }, {});
 
-    return {
-      ...globalAcc,
-      [date]: dateAcc,
-    };
+    globalAcc[date] = dateAcc;
+    return globalAcc;
   }, {});
 }
 
@@ -21,23 +16,18 @@ function mergeDays(combinations) {
   return Object.keys(combinations).reduce((globalAcc, date) => {
     const dateAcc = Object.keys(combinations[date]).reduce(
       (slotsAcc, count) => {
-        const countAcc = combinations[date][count].reduce(
-          (timesAcc, time) => ({
-            ...timesAcc,
-            [time]: `${count}/${CAPACITY}`,
-          }),
-          {}
-        );
+        const countAcc = combinations[date][count].reduce((timesAcc, time) => {
+          timesAcc[time] = `${count}/${CAPACITY}`;
+          return timesAcc;
+        }, {});
 
         return Object.assign(slotsAcc, countAcc);
       },
-      {}
+      {},
     );
 
-    return {
-      ...globalAcc,
-      [date]: dateAcc,
-    };
+    globalAcc[date] = dateAcc;
+    return globalAcc;
   }, {});
 }
 
