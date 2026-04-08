@@ -1,6 +1,4 @@
-const addDays = require("date-fns/addDays");
-const format = require("date-fns/format");
-const isDate = require("date-fns/isDate");
+const { addDays, format, isDate } = require("date-fns");
 
 WEEKDAYS = {
   SUNDAY: 0,

@@ -1,19 +1,17 @@
-jest.mock("node-fetch");
-const fetch = require("node-fetch");
-const { Response } = jest.requireActual("node-fetch");
 const client = require("./client");
 
 describe("client", () => {
   const date = "2021-05-19";
+  let fetchSpy;
 
   beforeEach(() => {
-    fetch.mockImplementation((url) =>
-      Promise.resolve(new Response(`{"url":"${url}"}`))
+    fetchSpy = jest.spyOn(global, "fetch").mockImplementation((url) =>
+      Promise.resolve(new Response(JSON.stringify({ url }), { status: 200 }))
     );
   });
 
   afterEach(() => {
-    fetch.mockClear();
+    fetchSpy.mockRestore();
   });
 
   describe("buildUrl()", () => {
@@ -30,7 +28,7 @@ describe("client", () => {
     });
 
     it("calls correct endpoint", () => {
-      expect(fetch).toHaveBeenCalledWith(
+      expect(fetchSpy).toHaveBeenCalledWith(
         client.buildUrl(date, 1, client.CABLES.PRO)
       );
     });
@@ -42,16 +40,16 @@ describe("client", () => {
     });
 
     it("fetches all combinations", () => {
-      expect(fetch).toHaveBeenCalledWith(
+      expect(fetchSpy).toHaveBeenCalledWith(
         client.buildUrl(date, 1, client.CABLES.EASY)
       );
-      expect(fetch).toHaveBeenCalledWith(
+      expect(fetchSpy).toHaveBeenCalledWith(
         client.buildUrl(date, 2, client.CABLES.EASY)
       );
-      expect(fetch).toHaveBeenCalledWith(
+      expect(fetchSpy).toHaveBeenCalledWith(
         client.buildUrl(date, 3, client.CABLES.EASY)
       );
-      expect(fetch).toHaveBeenCalledWith(
+      expect(fetchSpy).toHaveBeenCalledWith(
         client.buildUrl(date, 4, client.CABLES.EASY)
       );
     });

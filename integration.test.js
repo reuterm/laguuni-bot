@@ -1,6 +1,3 @@
-jest.mock("node-fetch");
-const fetch = require("node-fetch");
-const { Response } = jest.requireActual("node-fetch");
 const { handleRequest } = require("./index");
 
 const buildReq = (text) => ({
@@ -16,22 +13,28 @@ const buildReq = (text) => ({
 
 describe("handleRequest()", () => {
   let res;
+  let fetchSpy;
 
   beforeEach(() => {
     res = {
       send: jest.fn(),
       sendStatus: jest.fn(),
     };
-    fetch.mockReset();
+    fetchSpy = jest
+      .spyOn(global, "fetch")
+      .mockResolvedValue(new Response(null, { status: 200 }));
+  });
+
+  afterEach(() => {
+    fetchSpy.mockRestore();
   });
 
   describe("when received message requires response", () => {
     beforeEach(async () => {
-      fetch.mockReturnValue(Promise.resolve(new Response()));
       await handleRequest(buildReq("help"), res);
     });
     it("sends response to the chat", () => {
-      expect(fetch).toHaveBeenCalledTimes(1);
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
     });
 
     it("responds to request", () => {
@@ -41,11 +44,10 @@ describe("handleRequest()", () => {
 
   describe("when received message does not require response", () => {
     beforeEach(async () => {
-      fetch.mockReturnValue(Promise.resolve(new Response()));
       await handleRequest(buildReq(" "), res);
     });
     it("does not send response to the chat", () => {
-      expect(fetch).not.toHaveBeenCalled();
+      expect(fetchSpy).not.toHaveBeenCalled();
     });
 
     it("responds to request", () => {
@@ -55,11 +57,10 @@ describe("handleRequest()", () => {
 
   describe("when received invalid message", () => {
     beforeEach(async () => {
-      fetch.mockReturnValue(Promise.resolve(new Response()));
       await handleRequest(buildReq(undefined), res);
     });
     it("does not send response to the chat", () => {
-      expect(fetch).not.toHaveBeenCalled();
+      expect(fetchSpy).not.toHaveBeenCalled();
     });
 
     it("responds to request", () => {
@@ -69,11 +70,10 @@ describe("handleRequest()", () => {
 
   describe("when received invalid request", () => {
     beforeEach(async () => {
-      fetch.mockReturnValue(Promise.resolve(new Response()));
       await handleRequest({ body: {} }, res);
     });
     it("does not send response to the chat", () => {
-      expect(fetch).not.toHaveBeenCalled();
+      expect(fetchSpy).not.toHaveBeenCalled();
     });
 
     it("responds to request", () => {
@@ -83,7 +83,7 @@ describe("handleRequest()", () => {
 
   describe("when sending response to the chat fails", () => {
     beforeEach(async () => {
-      fetch.mockReturnValue(Promise.reject(new Error("error")));
+      fetchSpy.mockRejectedValue(new Error("error"));
       await handleRequest(buildReq("help"), res);
     });
 

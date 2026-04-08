@@ -1,6 +1,3 @@
-jest.mock("node-fetch");
-const fetch = require("node-fetch");
-const { Response } = jest.requireActual("node-fetch");
 const { CABLES } = require("../client/client");
 const telegram = require("./telegram");
 
@@ -82,16 +79,23 @@ Thursday, June 4
   describe("sendMessage()", () => {
     describe("response is not empty", () => {
       let data;
+      let fetchSpy;
 
       beforeEach(() => {
         data = { chatId: "someId", response: "someResponse" };
         process.env = Object.assign(process.env, { TELEGRAM_TOKEN: "myToken" });
-        fetch.mockReturnValue(Promise.resolve(new Response()));
+        fetchSpy = jest
+          .spyOn(global, "fetch")
+          .mockResolvedValue(new Response(null, { status: 200 }));
+      });
+
+      afterEach(() => {
+        fetchSpy.mockRestore();
       });
 
       it("calls correct endpoint", () => {
         telegram.sendMessage(data);
-        expect(fetch).toHaveBeenCalledWith(
+        expect(fetchSpy).toHaveBeenCalledWith(
           "https://api.telegram.org/botmyToken/sendMessage",
           expect.any(Object)
         );
@@ -99,7 +103,7 @@ Thursday, June 4
 
       it("calls endpoint with correct parameters", () => {
         telegram.sendMessage(data);
-        expect(fetch).toHaveBeenCalledWith(expect.any(String), {
+        expect(fetchSpy).toHaveBeenCalledWith(expect.any(String), {
           method: "POST",
           body: JSON.stringify({
             chat_id: data.chatId,
@@ -113,7 +117,7 @@ Thursday, June 4
 
       describe("when call fails", () => {
         beforeEach(() => {
-          fetch.mockReturnValue(Promise.reject(new Error("error")));
+          fetchSpy.mockRejectedValue(new Error("error"));
         });
 
         it("throws an error", async () => {
@@ -125,13 +129,21 @@ Thursday, June 4
     });
 
     describe("when response is empty", () => {
+      let fetchSpy;
+
       beforeEach(() => {
-        fetch.mockClear();
+        fetchSpy = jest
+          .spyOn(global, "fetch")
+          .mockResolvedValue(new Response(null, { status: 200 }));
+      });
+
+      afterEach(() => {
+        fetchSpy.mockRestore();
       });
 
       it("does nothing", () => {
         telegram.sendMessage({ chatId: "someId" });
-        expect(fetch).not.toHaveBeenCalled();
+        expect(fetchSpy).not.toHaveBeenCalled();
       });
     });
   });

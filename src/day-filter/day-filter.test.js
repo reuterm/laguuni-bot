@@ -1,5 +1,4 @@
-const addDays = require("date-fns/addDays");
-const isAfter = require("date-fns/isAfter");
+const { addDays, isAfter } = require("date-fns");
 const dayFilter = require("./day-filter");
 
 describe("day filter", () => {

@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 const { CABLES } = require("../client/client");
 const { Table } = require("../table/table");
 const logger = require("../logging/client");
