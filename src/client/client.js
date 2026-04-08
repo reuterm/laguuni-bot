@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 const { formatDate } = require("../day-filter/day-filter");
 
 const CABLES = {

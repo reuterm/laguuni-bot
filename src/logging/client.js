@@ -1,34 +1,34 @@
-const winston = require("winston");
-const { LEVEL } = require('triple-beam');
+const pino = require("pino");
 
-const SeverityLookup = {
-  'default': 'DEFAULT',
-  'silly': 'DEFAULT',
-  'verbose': 'DEBUG',
-  'debug': 'DEBUG',
-  'http': 'notice',
-  'info': 'info',
-  'warn': 'WARNING',
-  'error': 'ERROR',
-}
+const GCP_SEVERITY = {
+  trace: "DEBUG",
+  debug: "DEBUG",
+  info: "INFO",
+  warn: "WARNING",
+  error: "ERROR",
+  fatal: "CRITICAL",
+};
 
-const stackdriverSeverityFormat = winston.format((info) => ({
-  ...info,
-  // Add severity to your log
-  severity: SeverityLookup[info[LEVEL]] || SeverityLookup['default'],
-}));
+const _logger = pino({
+  messageKey: "message",
+  formatters: {
+    level(label) {
+      return { severity: GCP_SEVERITY[label] ?? label.toUpperCase() };
+    },
+    bindings() {
+      return {};
+    },
+  },
+  serializers: {
+    error: pino.stdSerializers.err,
+  },
+});
 
-const formatters = [
-  winston.format.timestamp(),
-  // Add the format that supplements the JSON with severity
-  stackdriverSeverityFormat(),
-  winston.format.json(),
-];
+const logger = {
+  debug: (message, meta = {}) => _logger.debug(meta, message),
+  info: (message, meta = {}) => _logger.info(meta, message),
+  warn: (message, meta = {}) => _logger.warn(meta, message),
+  error: (message, meta = {}) => _logger.error(meta, message),
+};
 
-module.exports = winston.createLogger({
-  level: "info",
-  format: winston.format.combine(...formatters),
-  transports: [
-    new winston.transports.Console(),
-  ],
-})
+module.exports = logger;

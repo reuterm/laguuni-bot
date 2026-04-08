@@ -1,5 +1,5 @@
 jest.mock("./src/client/client");
-const addDays = require("date-fns/addDays");
+const { addDays } = require("date-fns");
 const client = require("./src/client/client");
 const { formatDate } = require("./src/day-filter/day-filter");
 const { formatToHumanDate, OVERVIEW_LINK, BOOKING_PAGE } = require("./src/telegram/telegram");
