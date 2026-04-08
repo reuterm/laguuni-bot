@@ -1,34 +1,23 @@
-const winston = require("winston");
-const { LEVEL } = require('triple-beam');
+const SEVERITY = {
+  debug: "DEBUG",
+  info: "info",
+  warn: "WARNING",
+  error: "ERROR",
+};
 
-const SeverityLookup = {
-  'default': 'DEFAULT',
-  'silly': 'DEFAULT',
-  'verbose': 'DEBUG',
-  'debug': 'DEBUG',
-  'http': 'notice',
-  'info': 'info',
-  'warn': 'WARNING',
-  'error': 'ERROR',
-}
+const logger = Object.fromEntries(
+  Object.keys(SEVERITY).map((level) => [
+    level,
+    (message, meta = {}) =>
+      console.log(
+        JSON.stringify({
+          severity: SEVERITY[level],
+          message,
+          ...meta,
+          timestamp: new Date().toISOString(),
+        })
+      ),
+  ])
+);
 
-const stackdriverSeverityFormat = winston.format((info) => ({
-  ...info,
-  // Add severity to your log
-  severity: SeverityLookup[info[LEVEL]] || SeverityLookup['default'],
-}));
-
-const formatters = [
-  winston.format.timestamp(),
-  // Add the format that supplements the JSON with severity
-  stackdriverSeverityFormat(),
-  winston.format.json(),
-];
-
-module.exports = winston.createLogger({
-  level: "info",
-  format: winston.format.combine(...formatters),
-  transports: [
-    new winston.transports.Console(),
-  ],
-})
+module.exports = logger;
