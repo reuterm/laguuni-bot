@@ -51,7 +51,7 @@ describe("table", () => {
       table.addRow(["a", "b", "c"]);
       table.addRow(["a", "b", "cd"]);
       expect(table.toString()).toEqual(
-        "+-----+-----+-------+\n| one | two | three |\n+-----+-----+-------+\n| a   | b   | c     |\n| a   | b   | cd    |\n+-----+-----+-------+\n"
+        "+-----+-----+-------+\n| one | two | three |\n+-----+-----+-------+\n| a   | b   | c     |\n| a   | b   | cd    |\n+-----+-----+-------+\n",
       );
     });
   });

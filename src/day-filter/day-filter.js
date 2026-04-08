@@ -1,6 +1,6 @@
 const { addDays, format, isDate } = require("date-fns");
 
-WEEKDAYS = {
+const WEEKDAYS = {
   SUNDAY: 0,
   MONDAY: 1,
   TUESDAY: 2,
@@ -36,9 +36,7 @@ function convertToDate(filter) {
 }
 
 function getDates(str) {
-  const filters = str
-    .split("and")
-    .map((item) => item.trim());
+  const filters = str.split("and").map((item) => item.trim());
   const converted = filters.map(convertToDate);
   return converted.filter((date) => Boolean(date));
 }

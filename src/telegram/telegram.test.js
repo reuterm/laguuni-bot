@@ -27,7 +27,7 @@ Thursday, June 4
   describe("getBookingPage", () => {
     it("returns formatted link to existing cable", () => {
       expect(telegram.getBookingPage(CABLES.HIETSU)).toEqual(
-        "[Book](https://shop.laguuniin.fi/fi_FI/wakeboarding-hietsu/wakeboarding-hietsun-kaapeli)"
+        "[Book](https://shop.laguuniin.fi/fi_FI/wakeboarding-hietsu/wakeboarding-hietsun-kaapeli)",
       );
     });
 
@@ -53,7 +53,7 @@ Thursday, June 4
 
     it("includes all items", () => {
       expect(telegram.formatDateSlots(data).length).toEqual(
-        Object.keys(data).length
+        Object.keys(data).length,
       );
     });
   });
@@ -97,7 +97,7 @@ Thursday, June 4
         telegram.sendMessage(data);
         expect(fetchSpy).toHaveBeenCalledWith(
           "https://api.telegram.org/botmyToken/sendMessage",
-          expect.any(Object)
+          expect.any(Object),
         );
       });
 
@@ -122,7 +122,7 @@ Thursday, June 4
 
         it("throws an error", async () => {
           expect(telegram.sendMessage(data)).rejects.toEqual(
-            new Error("error")
+            new Error("error"),
           );
         });
       });
@@ -155,13 +155,13 @@ Thursday, June 4
 
     it("trims whitespace", () => {
       expect(telegram.sanitiseMessage("   some whitespace ")).toEqual(
-        "some whitespace"
+        "some whitespace",
       );
     });
 
     it("removes leading forward slash", () => {
       expect(telegram.sanitiseMessage("/some/message/")).toEqual(
-        "some/message/"
+        "some/message/",
       );
     });
 
@@ -193,7 +193,7 @@ Thursday, June 4
 
     it("espaces multiple characters", () => {
       expect(telegram.escapeMarkdown("<alert>('Hi.')</alert>")).toEqual(
-        "\\<alert\\>('Hi\\.')\\</alert\\>"
+        "\\<alert\\>('Hi\\.')\\</alert\\>",
       );
     });
   });

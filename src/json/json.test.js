@@ -64,7 +64,7 @@ describe("json", () => {
   describe("extractDateCountCombinations()", () => {
     it("includes all days", () => {
       expect(json.extractDateCountCombinations(getRawJson())).toMatchObject(
-        getStrippedJson()
+        getStrippedJson(),
       );
     });
 
@@ -83,7 +83,7 @@ describe("json", () => {
   describe("mergeDays()", () => {
     it("correctly merges data of same days", () => {
       expect(json.mergeDays(getStrippedJson())).toMatchObject(
-        getFormattedJson()
+        getFormattedJson(),
       );
     });
 
@@ -110,7 +110,7 @@ describe("json", () => {
           "2021-05-20": {
             "10:00": "1/4",
           },
-        })
+        }),
       ).toMatchObject({
         "2021-05-20": {
           "10:00": "1/4",

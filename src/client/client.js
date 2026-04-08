@@ -31,7 +31,7 @@ function fetchDateSlots(date, cable) {
 async function getTimeSlots(dates, cable) {
   const dateStrings = dates.map((date) => formatDate(date));
   const timeSlots = await Promise.all(
-    dateStrings.map((date) => Promise.all(fetchDateSlots(date, cable)))
+    dateStrings.map((date) => Promise.all(fetchDateSlots(date, cable))),
   );
 
   return timeSlots.reduce((acc, data, i) => {
