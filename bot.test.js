@@ -1,4 +1,3 @@
-jest.mock("./src/client/client");
 const { addDays } = require("date-fns");
 const client = require("./src/client/client");
 const { formatDate } = require("./src/day-filter/day-filter");
@@ -17,6 +16,7 @@ const {
 
 describe("bot", () => {
   let response;
+  let getTimeSlotsSpy;
   const today = new Date();
 
   const getJson = (dates) =>
@@ -29,6 +29,10 @@ describe("bot", () => {
       ];
       return acc;
     }, {});
+
+  afterEach(() => {
+    getTimeSlotsSpy?.mockRestore();
+  });
 
   describe("stripCableFilter()", () => {
     it("correctly detects and removes pro cable", () => {
@@ -55,9 +59,11 @@ describe("bot", () => {
 
   describe("processMessage()", () => {
     beforeEach(async () => {
-      jest.spyOn(client, "getTimeSlots").mockImplementation((dates) => {
-        return getJson(dates);
-      });
+      getTimeSlotsSpy = vi
+        .spyOn(client, "getTimeSlots")
+        .mockImplementation((dates) => {
+          return getJson(dates);
+        });
     });
 
     describe("when message only contains single day", () => {
@@ -149,9 +155,11 @@ ${OVERVIEW_LINK}
 
     describe("when fetching data failed", () => {
       beforeEach(async () => {
-        jest.spyOn(client, "getTimeSlots").mockImplementation((_dates) => {
-          throw new Error("fetch failed");
-        });
+        getTimeSlotsSpy = vi
+          .spyOn(client, "getTimeSlots")
+          .mockImplementation(() => {
+            throw new Error("fetch failed");
+          });
         response = await processMessage("today");
       });
 

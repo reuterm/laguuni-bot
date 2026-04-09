@@ -10,6 +10,7 @@ const GCP_SEVERITY = {
 };
 
 const _logger = pino({
+  level: process.env.ENV === "TEST" ? "silent" : "info",
   messageKey: "message",
   formatters: {
     level(label) {

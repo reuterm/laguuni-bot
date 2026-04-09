@@ -1,4 +1,5 @@
-const { getTimeSlots, CABLES } = require("./src/client/client");
+const client = require("./src/client/client");
+const { CABLES } = client;
 const { formatTimeSlots } = require("./src/json/json");
 const { formatMessage } = require("./src/telegram/telegram");
 const { getDates } = require("./src/day-filter/day-filter");
@@ -33,7 +34,7 @@ async function respondWithTimeSlots(message) {
   }
 
   try {
-    const timeSlotsRaw = await getTimeSlots(dates, cable);
+    const timeSlotsRaw = await client.getTimeSlots(dates, cable);
     const timeSlots = formatTimeSlots(timeSlotsRaw);
 
     return formatMessage(timeSlots, cable);

@@ -84,7 +84,7 @@ Thursday, June 4
       beforeEach(() => {
         data = { chatId: "someId", response: "someResponse" };
         process.env = Object.assign(process.env, { TELEGRAM_TOKEN: "myToken" });
-        fetchSpy = jest
+        fetchSpy = vi
           .spyOn(global, "fetch")
           .mockResolvedValue(new Response(null, { status: 200 }));
       });
@@ -121,7 +121,7 @@ Thursday, June 4
         });
 
         it("throws an error", async () => {
-          expect(telegram.sendMessage(data)).rejects.toEqual(
+          await expect(telegram.sendMessage(data)).rejects.toEqual(
             new Error("error"),
           );
         });
@@ -132,7 +132,7 @@ Thursday, June 4
       let fetchSpy;
 
       beforeEach(() => {
-        fetchSpy = jest
+        fetchSpy = vi
           .spyOn(global, "fetch")
           .mockResolvedValue(new Response(null, { status: 200 }));
       });

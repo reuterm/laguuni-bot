@@ -5,7 +5,7 @@ describe("client", () => {
   let fetchSpy;
 
   beforeEach(() => {
-    fetchSpy = jest
+    fetchSpy = vi
       .spyOn(global, "fetch")
       .mockImplementation((url) =>
         Promise.resolve(new Response(JSON.stringify({ url }), { status: 200 })),

@@ -17,10 +17,10 @@ describe("handleRequest()", () => {
 
   beforeEach(() => {
     res = {
-      send: jest.fn(),
-      sendStatus: jest.fn(),
+      send: vi.fn(),
+      sendStatus: vi.fn(),
     };
-    fetchSpy = jest
+    fetchSpy = vi
       .spyOn(global, "fetch")
       .mockResolvedValue(new Response(null, { status: 200 }));
   });
