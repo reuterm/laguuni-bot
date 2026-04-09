@@ -1,4 +1,4 @@
-const { formatDate } = require("../day-filter/day-filter");
+import { formatDate } from "../day-filter/day-filter.js";
 
 const CABLES = {
   PRO: "pro",
@@ -40,10 +40,10 @@ async function getTimeSlots(dates, cable) {
   }, {});
 }
 
-module.exports = {
-  getTimeSlots,
-  fetchDateSlots,
-  fetchDateCountCombination,
+export {
   buildUrl,
   CABLES,
+  fetchDateCountCombination,
+  fetchDateSlots,
+  getTimeSlots,
 };

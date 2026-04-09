@@ -50,9 +50,9 @@ function formatTimeSlots(timeSlotsRaw) {
   return removeEmptyDays(merged);
 }
 
-module.exports = {
+export {
   extractDateCountCombinations,
+  formatTimeSlots,
   mergeDays,
   removeEmptyDays,
-  formatTimeSlots,
 };

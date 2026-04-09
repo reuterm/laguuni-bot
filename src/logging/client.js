@@ -1,4 +1,4 @@
-const pino = require("pino");
+import pino from "pino";
 
 const GCP_SEVERITY = {
   trace: "DEBUG",
@@ -32,4 +32,4 @@ const logger = {
   error: (message, meta = {}) => _logger.error(meta, message),
 };
 
-module.exports = logger;
+export default logger;

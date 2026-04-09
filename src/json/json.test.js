@@ -1,4 +1,4 @@
-const json = require("./json");
+import * as json from "./json.js";
 
 describe("json", () => {
   const getRawJson = () => ({

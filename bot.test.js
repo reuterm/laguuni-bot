@@ -1,22 +1,25 @@
-const { addDays } = require("date-fns");
-const client = require("./src/client/client");
-const { formatDate } = require("./src/day-filter/day-filter");
-const {
+import { addDays } from "date-fns";
+import {
+  ERR_FETCH_DATA,
+  ERR_NO_DATES,
+  HELP_MESSAGE,
+  processMessage,
+  stripCableFilter,
+} from "./bot.js";
+import * as client from "./src/client/client.js";
+import { formatDate } from "./src/day-filter/day-filter.js";
+import {
+  BOOKING_PAGE,
   formatToHumanDate,
   OVERVIEW_LINK,
-  BOOKING_PAGE,
-} = require("./src/telegram/telegram");
-const {
-  stripCableFilter,
-  processMessage,
-  HELP_MESSAGE,
-  ERR_NO_DATES,
-  ERR_FETCH_DATA,
-} = require("./bot");
+} from "./src/telegram/telegram.js";
+
+vi.mock("./src/client/client.js", async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, getTimeSlots: vi.fn() };
+});
 
 describe("bot", () => {
-  let response;
-  let getTimeSlotsSpy;
   const today = new Date();
 
   const getJson = (dates) =>
@@ -29,10 +32,6 @@ describe("bot", () => {
       ];
       return acc;
     }, {});
-
-  afterEach(() => {
-    getTimeSlotsSpy?.mockRestore();
-  });
 
   describe("stripCableFilter()", () => {
     it("correctly detects and removes pro cable", () => {
@@ -58,12 +57,10 @@ describe("bot", () => {
   });
 
   describe("processMessage()", () => {
+    let response;
+
     beforeEach(async () => {
-      getTimeSlotsSpy = vi
-        .spyOn(client, "getTimeSlots")
-        .mockImplementation((dates) => {
-          return getJson(dates);
-        });
+      client.getTimeSlots.mockImplementation((dates) => getJson(dates));
     });
 
     describe("when message only contains single day", () => {
@@ -155,11 +152,9 @@ ${OVERVIEW_LINK}
 
     describe("when fetching data failed", () => {
       beforeEach(async () => {
-        getTimeSlotsSpy = vi
-          .spyOn(client, "getTimeSlots")
-          .mockImplementation(() => {
-            throw new Error("fetch failed");
-          });
+        client.getTimeSlots.mockImplementation(() => {
+          throw new Error("fetch failed");
+        });
         response = await processMessage("today");
       });
 

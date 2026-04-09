@@ -1,4 +1,4 @@
-const client = require("./client");
+import * as client from "./client.js";
 
 describe("client", () => {
   const date = "2021-05-19";

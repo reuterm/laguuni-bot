@@ -1,4 +1,4 @@
-const { addDays, format, isDate } = require("date-fns");
+import { addDays, format, isDate } from "date-fns";
 
 const WEEKDAYS = {
   SUNDAY: 0,
@@ -45,11 +45,11 @@ function formatDate(date) {
   return isDate(date) ? format(date, "yyyy-MM-dd") : null;
 }
 
-module.exports = {
-  WEEKDAYS,
-  formatDate,
+export {
   convertToDate,
-  getWeekdayNumber,
-  getNextDateOfWeekday,
+  formatDate,
   getDates,
+  getNextDateOfWeekday,
+  getWeekdayNumber,
+  WEEKDAYS,
 };
