@@ -1,5 +1,5 @@
-const { addDays, isAfter } = require("date-fns");
-const dayFilter = require("./day-filter");
+import { addDays, isAfter } from "date-fns";
+import * as dayFilter from "./day-filter.js";
 
 describe("day filter", () => {
   describe("getNextDateOfWeekday()", () => {

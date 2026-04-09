@@ -1,4 +1,4 @@
-const { processMessage } = require("../bot");
+import { processMessage } from "../bot.js";
 
 const query = process.argv[2] || "tomorrow";
 

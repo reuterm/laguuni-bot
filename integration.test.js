@@ -1,4 +1,4 @@
-const { handleRequest } = require("./index");
+import { handleRequest } from "./index.js";
 
 const buildReq = (text) => ({
   body: {

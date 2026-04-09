@@ -1,10 +1,10 @@
-const {
-  sendMessage,
-  sanitiseMessage,
+import { processMessage } from "./bot.js";
+import logger from "./src/logging/client.js";
+import {
   escapeMarkdown,
-} = require("./src/telegram/telegram");
-const { processMessage } = require("./bot");
-const logger = require("./src/logging/client");
+  sanitiseMessage,
+  sendMessage,
+} from "./src/telegram/telegram.js";
 
 /**
  * Responds to any HTTP request.
@@ -41,6 +41,4 @@ async function handleRequest(req, res) {
   }
 }
 
-module.exports = {
-  handleRequest,
-};
+export { handleRequest };

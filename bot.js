@@ -1,9 +1,8 @@
-const client = require("./src/client/client");
-const { CABLES } = client;
-const { formatTimeSlots } = require("./src/json/json");
-const { formatMessage } = require("./src/telegram/telegram");
-const { getDates } = require("./src/day-filter/day-filter");
-const logger = require("./src/logging/client");
+import { CABLES, getTimeSlots } from "./src/client/client.js";
+import { getDates } from "./src/day-filter/day-filter.js";
+import { formatTimeSlots } from "./src/json/json.js";
+import logger from "./src/logging/client.js";
+import { formatMessage } from "./src/telegram/telegram.js";
 
 const HELP_MESSAGE = `Get booking information of Laguunis Pro Cable
 
@@ -34,7 +33,7 @@ async function respondWithTimeSlots(message) {
   }
 
   try {
-    const timeSlotsRaw = await client.getTimeSlots(dates, cable);
+    const timeSlotsRaw = await getTimeSlots(dates, cable);
     const timeSlots = formatTimeSlots(timeSlotsRaw);
 
     return formatMessage(timeSlots, cable);
@@ -57,10 +56,10 @@ function processMessage(message) {
   return respondWithTimeSlots(message);
 }
 
-module.exports = {
-  stripCableFilter,
-  processMessage,
-  HELP_MESSAGE,
-  ERR_NO_DATES,
+export {
   ERR_FETCH_DATA,
+  ERR_NO_DATES,
+  HELP_MESSAGE,
+  processMessage,
+  stripCableFilter,
 };

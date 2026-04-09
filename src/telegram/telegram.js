@@ -1,6 +1,6 @@
-const { CABLES } = require("../client/client");
-const { Table } = require("../table/table");
-const logger = require("../logging/client");
+import { CABLES } from "../client/client.js";
+import logger from "../logging/client.js";
+import { Table } from "../table/table.js";
 
 const ESCAPE_CHARS = /[<>!.|+-]/g;
 const LAGUUNI_FIXER_URL =
@@ -101,15 +101,15 @@ function escapeMarkdown(message) {
   return message.replace(ESCAPE_CHARS, "\\$&");
 }
 
-module.exports = {
-  sendMessage,
-  getBookingPage,
-  formatMessage,
-  formatDays,
-  formatToHumanDate,
-  formatDateSlots,
-  sanitiseMessage,
-  escapeMarkdown,
-  OVERVIEW_LINK,
+export {
   BOOKING_PAGE,
+  escapeMarkdown,
+  formatDateSlots,
+  formatDays,
+  formatMessage,
+  formatToHumanDate,
+  getBookingPage,
+  OVERVIEW_LINK,
+  sanitiseMessage,
+  sendMessage,
 };

@@ -1,5 +1,5 @@
-const { CABLES } = require("../client/client");
-const telegram = require("./telegram");
+import { CABLES } from "../client/client.js";
+import * as telegram from "./telegram.js";
 
 describe("telegram", () => {
   const FORMATTED = `Wednesday, June 3
