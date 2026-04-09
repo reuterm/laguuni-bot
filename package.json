@@ -12,6 +12,9 @@
   },
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
     "@google-cloud/functions-framework": "^5.0.2",
     "date-fns": "^4.1.0",
